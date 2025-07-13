@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { ApolloWrapper } from "./ApolloWrapper";
-import Navbar from "components/Navbar";
+import Navbar from "components/Search";
 import Footer from "components/Footer";
 
 export const metadata: Metadata = {
@@ -14,15 +14,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body>
         <ApolloWrapper>
-          <header>
-            <Navbar/>
-          </header>
-
-          <main>
-            {children}
-          </main>
-
-          <Footer />
+          <div className="text-custom_black text-sm min-h-dvh flex flex-col">
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </ApolloWrapper>
       </body>
     </html>

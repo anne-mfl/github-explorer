@@ -1,33 +1,32 @@
-'use client'
-import { useLazyQuery } from '@apollo/client';
-import { GET_USERS } from './queries';
-
-import { useState } from 'react'
+import React from 'react'
+import Image from 'next/image'
+import mark from 'assets/mark.png'
+import Search from 'components/Search'
 
 const Navbar = () => {
-
-  const [userNameInputValue, setUserNameInputValue] = useState<string>('');
-
-  const [getUsers, {data, loading, error}] = useLazyQuery(GET_USERS, {
-    variables: {
-      userQuery: userNameInputValue,
-    },
-  })
-
-  console.log('data', data);
-
   return (
-    <nav>
-      <input
-        type='text'
-        value={userNameInputValue}
-        onChange={(e) => {
-          setUserNameInputValue(e.target.value)
-          getUsers()
-        }}
-        placeholder='Search GitHub Users'
-        className='p-2 border rounded'
-      />
+    // <nav className='flex items-center'>
+    //   <Image
+    //     src={mark}
+    //     alt="GitHub Explorer Logo"
+    //     width={40}
+    //     height={40}
+    //   />
+    //   Navbar
+    //   <Search />
+    // </nav>
+    <nav className='flex items-center justify-between h-16 px-4 py-2 bg-navbar_background border-b border-custom_light_grey sticky top-0 z-30'>
+      <div className='flex items-center gap-2'>
+        <Image
+          src={mark}
+          alt="GitHub Explorer Logo"
+          width={40}
+          height={40}
+        />
+        <span className='text-xl font-medium'>GitHub Explorer</span>
+      </div>
+
+      <Search isInNavbar={true} />
     </nav>
   )
 }

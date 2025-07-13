@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  --color-custom_grey: #59636E;
+  --color-custom_light_grey: #D1D9E0B3;
+  --color-custom_black: #1F2328;
+  --color-custom_blue: #0969DA;
+  --color-navbar_background: #F6F8FA;
+
+  /* --font-gilroy: 'Gilroy', sans-serif;
+  --font-playfair: 'Playfair Display', serif; */
+}
