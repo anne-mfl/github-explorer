@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { ApolloWrapper } from "./ApolloWrapper";
-import Navbar from "components/Search";
 import Footer from "components/Footer";
 
 export const metadata: Metadata = {
