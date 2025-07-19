@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
-import { ApolloWrapper } from "./ApolloWrapper";
+import { ApolloWrapper } from "context/ApolloWrapper";
+import { GithubProvider } from "context/GithubContext";
 import Footer from "components/Footer";
 
 export const metadata: Metadata = {
@@ -12,14 +13,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <ApolloWrapper>
-          <div className="text-custom_black text-sm min-h-dvh flex flex-col">
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </div>
-        </ApolloWrapper>
+        <GithubProvider>
+          <ApolloWrapper>
+            <div className="text-custom_black text-sm min-h-dvh flex flex-col">
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </ApolloWrapper>
+        </GithubProvider>
       </body>
     </html>
   );

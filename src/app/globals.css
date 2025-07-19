@@ -6,7 +6,15 @@
   --color-custom_black: #1F2328;
   --color-custom_blue: #0969DA;
   --color-navbar_background: #F6F8FA;
+  --color-hover_grey: #818B981A;
+  --color-custom_orange: #FD8C73;
 
   /* --font-gilroy: 'Gilroy', sans-serif;
   --font-playfair: 'Playfair Display', serif; */
+}
+
+@layer components {
+  .btn {
+    @apply hover:bg-hover_grey rounded-lg cursor-pointer 
+  }
 }
