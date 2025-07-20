@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_USER_REPOSITORIES = gql`
   query(
-  $login: String!
+  $userId: String!
   $first: Int = 20
   $after: String
   $orderBy: RepositoryOrderField = UPDATED_AT
@@ -11,16 +11,15 @@ export const GET_USER_REPOSITORIES = gql`
   $privacy: RepositoryPrivacy
   $isFork: Boolean
   $isArchived: Boolean
-  $language: String
 )  {
-    user(login: $userId) {
-  # Basic user info for the page header
+ user(login: $userId) {
+    # Basic user info for the page header
     login
     name
     avatarUrl
     
-    # Repository counts for different categories
-    repositories(ownerAffiliations: OWNER, privacy: PUBLIC) {
+    # Repository counts for different categories - using aliases
+    ownedRepositories: repositories(ownerAffiliations: OWNER, privacy: PUBLIC) {
       totalCount
     }
     
@@ -94,7 +93,7 @@ export const GET_USER_REPOSITORIES = gql`
           color
         }
         
-        languages(first: 5, orderBy: { field: SIZE, direction: DESC }) {
+        topLanguages: languages(first: 5, orderBy: { field: SIZE, direction: DESC }) {
           totalSize
           edges {
             size
@@ -183,11 +182,6 @@ export const GET_USER_REPOSITORIES = gql`
           totalCount
         }
         
-        # Projects
-        projects(first: 1) {
-          totalCount
-        }
-        
         # Wiki
         hasWikiEnabled
         
@@ -197,111 +191,6 @@ export const GET_USER_REPOSITORIES = gql`
         # Package info (if any)
         packages(first: 1) {
           totalCount
-        }
-      }
-    }
-    
-    # Get available languages for filtering (separate query might be better for this)
-    repositories(first: 100, ownerAffiliations: OWNER) {
-      nodes {
-        primaryLanguage {
-          name
-        }
-        languages(first: 10) {
-          nodes {
-            name
-          }
-        }
-      }
-    }
-  }
-}
-
-# Separate query for getting language filter options
-query GetUserLanguages($login: String!) {
-  user(login: $login) {
-    repositories(first: 100, ownerAffiliations: OWNER, privacy: PUBLIC) {
-      nodes {
-        primaryLanguage {
-          name
-        }
-        languages(first: 20) {
-          nodes {
-            name
-          }
-        }
-      }
-    }
-  }
-}
-
-# Query for contributed repositories (separate tab)
-query GetUserContributedRepositories(
-  $login: String!
-  $first: Int = 20
-  $after: String
-  $orderBy: RepositoryOrderField = UPDATED_AT
-  $direction: OrderDirection = DESC
-) {
-  user(login: $login) {
-    login
-    name
-    avatarUrl
-    
-    repositoriesContributedTo(
-      first: $first
-      after: $after
-      orderBy: { field: $orderBy, direction: $direction }
-      includeUserRepositories: false
-      contributionTypes: [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY]
-    ) {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      
-      nodes {
-        id
-        name
-        nameWithOwner
-        description
-        url
-        
-        owner {
-          login
-          avatarUrl
-        }
-        
-        createdAt
-        updatedAt
-        pushedAt
-        
-        stargazerCount
-        forkCount
-        
-        isPrivate
-        isFork
-        isArchived
-        
-        primaryLanguage {
-          name
-          color
-        }
-        
-        licenseInfo {
-          name
-          nickname
-        }
-        
-        repositoryTopics(first: 5) {
-          nodes {
-            topic {
-              name
-            }
-          }
         }
       }
     }
