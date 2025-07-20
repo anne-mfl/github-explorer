@@ -9,14 +9,21 @@ interface GithubContextType {
   // setRepositories: (repos: any[]) => void;
   // currentTab: string;
   // setCurrentTab: (tab: string) => void;
+  userData: any;
+  setUserData: (data: any) => void;
 }
+
 
 const GithubContext = createContext<GithubContextType | undefined>(undefined);
 
 export const GithubProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState("");
+  const [userData, setUserData] = useState<any>(null);  
   // const [repositories, setRepositories] = useState<any[]>([]);
   // const [currentTab, setCurrentTab] = useState<string>("overview");
+
+  console.log('====>',userData)
+
 
   return (
     <GithubContext.Provider
@@ -27,6 +34,8 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
         // setRepositories,
         // currentTab, 
         // setCurrentTab,
+        userData,
+        setUserData,
       }}
     >
       {children}
