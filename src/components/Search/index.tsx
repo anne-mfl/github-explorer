@@ -163,12 +163,6 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
               placeholder='Search GitHub Users or Repositories'
               className='h-8 border border-custom_light_grey rounded-lg w-96 pl-7 pr-10'
             />
-            <span
-              onClick={handleClear}
-              className='absolute right-6 top-1/2 transform -translate-y-1/2 text-custom_grey hover:bg-custom_light_grey cursor-pointer px-1.5 py-1 rounded-lg'
-            >
-              <FontAwesomeIcon icon={faCircleXmark} className='' />
-            </span>
           </div>
 
           {/* Modal overlay and results */}
@@ -238,12 +232,14 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
           placeholder='Search GitHub Users or Repositories'
           className='h-8 border border-custom_light_grey rounded-lg w-96 pl-7 pr-10'
         />
-        <span
-          onClick={handleClear}
-          className='absolute right-6 top-1/2 transform -translate-y-1/2 text-custom_grey hover:bg-custom_light_grey cursor-pointer px-1.5 py-1 rounded-lg'
-        >
-          <FontAwesomeIcon icon={faCircleXmark} className='' />
-        </span>
+        {inputValue !== '' &&
+          <span
+            onClick={handleClear}
+            className='absolute right-6 top-1/2 transform -translate-y-1/2 text-custom_grey hover:bg-custom_light_grey cursor-pointer px-1.5 py-1 rounded-lg'
+          >
+            <FontAwesomeIcon icon={faCircleXmark} className='' />
+          </span>
+        }
       </div>
 
       <SearchResults />
