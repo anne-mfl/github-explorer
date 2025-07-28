@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookOpen, faBookBookmark, faTableColumns, faCube, faStar } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
+import { useGithubContext } from 'context/GithubContext';
 
 const Tab = () => {
 
@@ -11,6 +12,9 @@ const Tab = () => {
 
   const { userId } = useParams();
   const currentTab = useSearchParams().get("tab") || "overview";
+  const githubContext = useGithubContext();
+  const repoCount = githubContext?.userData?.user?.repositories?.totalCount;
+  const starredCount = githubContext?.userData?.user?.starredRepositories?.totalCount;
 
   return (
     <div className='bg-navbar_background border-b border-custom_light_grey px-4 h-11'>
@@ -23,6 +27,12 @@ const Tab = () => {
             >
               <FontAwesomeIcon icon={tab === "overview" ? faBookOpen : tab === "repositories" ? faBookBookmark : tab === "projects" ? faTableColumns : tab === "packages" ? faCube : faStar} />
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {tab === "repositories" && repoCount > 0 &&
+                <span className='text-xs bg-hover_grey font-semibold px-2 py-1 rounded-full'>{repoCount}</span>
+              }
+              {tab === "stars" && starredCount > 0 &&
+                <span className='text-xs bg-hover_grey font-semibold px-2 py-1 rounded-full'>{starredCount}</span>
+              }
             </Link>
           </li>
         ))}

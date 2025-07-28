@@ -1,14 +1,17 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_USER_OVERVIEW } from './query'
 import { useParams } from 'next/navigation';
-// import { useGithubContext } from 'context/GithubContext';
+import { useGithubContext } from 'context/GithubContext';
+import LeftBar from './components/LeftBar';
+import Repositories from './components/Repositories';
+import Contributions from './components/Contributions';
 
 const Overview = () => {
 
   const { userId } = useParams() as { userId: string };
 
-  // const { setUserId, setUserData } = useGithubContext();
+  const { setUserId, setUserData } = useGithubContext();
 
   const { data: userData, loading: userLoading, error: userError } = useQuery(GET_USER_OVERVIEW, {
     variables: {
@@ -16,12 +19,12 @@ const Overview = () => {
     },
   });
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     setUserId(userId);
-  //     setUserData(userData);
-  //   }
-  // }, [userData, setUserId, setUserData, userId]);
+  useEffect(() => {
+    if (userData) {
+      setUserId(userId);
+      setUserData(userData);
+    }
+  }, [userData, setUserId, setUserData, userId]);
 
   console.log(userData)
 
@@ -29,14 +32,15 @@ const Overview = () => {
     <div>
       {userLoading && <p>Loading...</p>}
       {userError && <p>Error: {userError.message}</p>}
+
       {userData && (
-        <div>
-          <h2>{userData.user.name} ({userData.user.login})</h2>
-          <p>{userData.user.bio}</p>
-          <p>Followers: {userData.user.followers.totalCount}</p>
-          <p>Following: {userData.user.following.totalCount}</p>
-          <p>Repositories: {userData.user.repositories.totalCount}</p>
-        </div>
+        <main className='flex gap-6 mx-20 my-2'>
+          <LeftBar />
+          <div className='grow bg-amber-50'>
+            <Repositories />
+            <Contributions />
+          </div>
+        </main>
       )}
     </div>
   )
