@@ -61,7 +61,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
     const handleClickOutside = (e: MouseEvent) => {
       if (isInNavbar && isModalOpen) {
         const searchContainer = document.getElementById('search-container');
-        const searchResults = document.getElementById('search-results');
+        // const searchResults = document.getElementById('search-results');
 
         // Close modal if clicking outside search container OR on the search results background
         if (searchContainer && !searchContainer.contains(e.target as Node)) {
@@ -132,7 +132,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
       {(repoData && inputValue !== '') &&
         <ul className='w-full px-4'>
           <p className='text-custom_grey text-xs p-2'>Repositories</p>
-          {repoData.search.nodes.map((repo: any) => (
+          {repoData.search.nodes.map((repo: { name: string; owner: { login: string } }) => (
             <li key={`${repo.name}_${repo.owner.login}`} className='flex items-center justify-between btn px-2 py-1.5'>
               <div className='flex items-center gap-2'>
                 <FontAwesomeIcon icon={faBookBookmark} />

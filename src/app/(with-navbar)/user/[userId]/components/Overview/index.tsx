@@ -26,7 +26,7 @@ const Overview = () => {
     }
   }, [userData, setUserId, setUserData, userId]);
 
-  console.log(userData)
+  console.log(userData?.user)
 
   return (
     <div>

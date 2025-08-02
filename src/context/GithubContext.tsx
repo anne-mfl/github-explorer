@@ -22,7 +22,7 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
   // const [repositories, setRepositories] = useState<any[]>([]);
   // const [currentTab, setCurrentTab] = useState<string>("overview");
 
-  console.log('====>',userData)
+  // console.log('====>',userData)
 
 
   return (

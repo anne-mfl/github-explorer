@@ -15,6 +15,7 @@ const LeftBar = () => {
 
   return (
     <div className='w-74'>
+
       <div className='relative w-full aspect-square'>
         <Image
           src={userData?.user?.avatarUrl}
@@ -23,6 +24,7 @@ const LeftBar = () => {
           className='rounded-full mb-4 object-cover border border-custom_light_grey'
         />
       </div>
+
       <div className='py-3'>
         <h1 className='text-2xl font-semibold'>{userData?.user?.name}</h1>
         <h2 className='text-xl text-custom_grey font-light'>{userData?.user?.login}</h2>
@@ -45,24 +47,55 @@ const LeftBar = () => {
         </p>
       </div>
 
-      <ul className='[&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li]:mb-2'>
-        <li>
-          <FontAwesomeIcon icon={faBuilding} />
-          <span>{userData?.user?.company}</span>
-        </li>
-        <li>
-          <FontAwesomeIcon icon={faLocationDot} />
-          <span>{userData?.user?.location}</span>
-        </li>
-        <li>
-          <FontAwesomeIcon icon={faEnvelope} />
-          <span>{userData?.user?.email}</span>
-        </li>
-        <li>
-          <FontAwesomeIcon icon={faLink} />
-          <span>{userData?.user?.websiteUrl}</span>
-        </li>
+      <ul className='[&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-2 [&>li]:mb-2 [&>li>a]:hover:underline [&>li>a>span]:hover:text-custom_blue cursor-pointer'>
+        {userData?.user?.company &&
+          <li>
+            <FontAwesomeIcon icon={faBuilding} />
+            <span>{userData?.user?.company}</span>
+          </li>
+        }
+        {userData?.user?.location &&
+          <li>
+            <FontAwesomeIcon icon={faLocationDot} />
+            <span>{userData?.user?.location}</span>
+          </li>
+        }
+        {userData?.user?.email &&
+          <li>
+            <Link href={`mailto:${userData?.user?.email}`}>
+              <FontAwesomeIcon icon={faEnvelope} />
+              <span>{userData?.user?.email}</span>
+            </Link>
+          </li>
+        }
+        {userData?.user?.websiteUrl &&
+          <li>
+            <Link href={userData?.user?.websiteUrl}>
+              <FontAwesomeIcon icon={faLink} />
+              <span>{userData?.user?.websiteUrl}</span>
+            </Link>
+          </li>
+        }
       </ul>
+
+      {userData?.user.organizations.nodes.length > 0 &&
+        <div className='border-t border-custom_border_grey my-4 py-4'>
+          <h3 className='text-base mb-2 font-semibold'>Organizations</h3>
+          {userData?.user.organizations.nodes.map((organization) => (
+            <Link key={organization.id} href={`https://github.com/${organization.login}`}>
+              <Image
+                src={organization.avatarUrl}
+                className='border border-custom_light_grey rounded-md'
+                alt={`${organization.login}'s avatar`}
+                width={32}
+                height={32}
+              />
+            </Link>
+          ))
+
+          }
+        </div>
+      }
 
     </div>
   )

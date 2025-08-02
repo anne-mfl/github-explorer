@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 const Repositories = () => {
 
   const { userId } = useParams() as { userId: string };
-  console.log("User ID:", userId);
+  // console.log("User ID:", userId);
 
   // Default: show user's own repositories, sorted by last updated
   const variables = {
