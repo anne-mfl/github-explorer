@@ -26,7 +26,7 @@ const Overview = () => {
     }
   }, [userData, setUserId, setUserData, userId]);
 
-  console.log(userData?.user)
+  // console.log(userData?.user)
 
   return (
     <div>
@@ -34,10 +34,11 @@ const Overview = () => {
       {userError && <p>Error: {userError.message}</p>}
 
       {userData && (
-        <main className='flex gap-6 mx-20 my-2'>
+        <main className='flex gap-6 mx-20 my-8'>
           <LeftBar />
-          <div className='grow bg-amber-50'>
+          <div className='grow'>
             <Repositories />
+            <div className='h-8'></div>
             <Contributions />
           </div>
         </main>

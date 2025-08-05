@@ -81,19 +81,20 @@ const LeftBar = () => {
       {userData?.user.organizations.nodes.length > 0 &&
         <div className='border-t border-custom_border_grey my-4 py-4'>
           <h3 className='text-base mb-2 font-semibold'>Organizations</h3>
-          {userData?.user.organizations.nodes.map((organization) => (
-            <Link key={organization.id} href={`https://github.com/${organization.login}`}>
-              <Image
-                src={organization.avatarUrl}
-                className='border border-custom_light_grey rounded-md'
-                alt={`${organization.login}'s avatar`}
-                width={32}
-                height={32}
-              />
-            </Link>
-          ))
-
-          }
+          <div className='flex flex-wrap gap-0.5'>
+            {userData?.user.organizations.nodes.map((organization) => {
+              // console.log(organization)
+              return <Link key={organization.id} href={`https://github.com/${organization.login}`}>
+                <Image
+                  src={organization.avatarUrl}
+                  className='border border-custom_light_grey rounded-md'
+                  alt={`${organization.login}'s avatar`}
+                  width={32}
+                  height={32}
+                />
+              </Link>
+            })}
+          </div>
         </div>
       }
 
