@@ -23,7 +23,7 @@ const Tab = () => {
           <li className={currentTab === tab ? "border-b-2 border-custom_orange font-semibold h-full" : "h-full"} key={tab}>
             <Link
               href={`/user/${userId}${tab === "overview" ? "" : `?tab=${tab}`}`}
-              className='cursor-pointer btn px-2 py-1.5 flex items-center gap-2'
+              className='cursor-pointer primary_button px-2 py-1.5 flex items-center gap-2'
             >
               <FontAwesomeIcon icon={tab === "overview" ? faBookOpen : tab === "repositories" ? faBookBookmark : tab === "projects" ? faTableColumns : tab === "packages" ? faCube : faStar} />
               {tab.charAt(0).toUpperCase() + tab.slice(1)}

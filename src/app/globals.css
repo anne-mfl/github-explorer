@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
 
 @theme {
   --color-custom_grey: #59636E;
@@ -16,7 +18,7 @@
 }
 
 @layer components {
-  .btn {
+  .primary_button {
     @apply hover:bg-hover_grey rounded-lg cursor-pointer 
   }
 }

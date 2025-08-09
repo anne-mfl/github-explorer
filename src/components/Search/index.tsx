@@ -113,7 +113,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
             <li
               onClick={() => handleNavigation(user.login)}
               key={`${user.name}_${user.login}_${i}`}
-              className='flex items-center justify-between btn px-2 py-1.5 cursor-pointer'
+              className='flex items-center justify-between primary_button px-2 py-1.5 cursor-pointer'
             >
               <div className='flex items-center gap-2'>
                 <FontAwesomeIcon icon={faBookBookmark} />
@@ -133,7 +133,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
         <ul className='w-full px-4'>
           <p className='text-custom_grey text-xs p-2'>Repositories</p>
           {repoData.search.nodes.map((repo: { name: string; owner: { login: string } }) => (
-            <li key={`${repo.name}_${repo.owner.login}`} className='flex items-center justify-between btn px-2 py-1.5'>
+            <li key={`${repo.name}_${repo.owner.login}`} className='flex items-center justify-between primary_button px-2 py-1.5'>
               <div className='flex items-center gap-2'>
                 <FontAwesomeIcon icon={faBookBookmark} />
                 <p className='truncate max-w-58'>

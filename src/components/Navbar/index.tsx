@@ -22,7 +22,7 @@ const Navbar = () => {
             height={32}
           />
         </Link>
-        <Link href={`/user/${userId}`} className='py-1 px-1.5 font-semibold btn'>
+        <Link href={`/user/${userId}`} className='py-1 px-1.5 font-semibold primary_button'>
           {userId}
         </Link>
       </div>
