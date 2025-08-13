@@ -34,8 +34,8 @@ const Overview = () => {
       {userError && <p>Error: {userError.message}</p>}
 
       {userData && (
-        <main className='flex gap-6 mx-20 my-8'>
-          <LeftBar />
+        <main className='flex gap-6 mx-32 my-8'>
+          {/* <LeftBar /> */}
           <div className='grow'>
             <Repositories />
             <div className='h-8'></div>

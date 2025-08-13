@@ -21,7 +21,7 @@ const LeftBar = () => {
           src={userData?.user?.avatarUrl}
           alt={`${userData?.user?.name || userData?.user?.login}'s avatar`}
           fill
-          className='rounded-full mb-4 object-cover border border-custom_light_grey'
+          className='rounded-full mb-4 object-cover border-2 border-custom_light_grey'
         />
       </div>
 

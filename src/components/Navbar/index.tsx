@@ -12,7 +12,7 @@ const Navbar = () => {
   const userId = params.userId as string;
 
   return (
-    <nav className='flex items-center justify-between h-16 px-4 pt-4 pb-2 bg-navbar_background  sticky top-0 z-30'>
+    <nav className='flex items-center justify-between h-16 px-4 pt-4 pb-2 bg-navbar_background  sticky top-0 z-30 w-full'>
       <div className='flex items-center gap-2'>
         <Link href="/">
           <Image
