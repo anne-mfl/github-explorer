@@ -3,9 +3,10 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_OVERVIEW } from './query'
 import { useParams } from 'next/navigation';
 import { useGithubContext } from 'context/GithubContext';
-import LeftBar from './components/LeftBar';
+import ProfileSideBar from './components/ProfileSideBar';
 import Repositories from './components/Repositories';
-import Contributions from './components/Contributions';
+// import Contributions from './components/Contributions/components/Heatmap';
+import Contributions from './components/Contributions'
 
 const Overview = () => {
 
@@ -35,7 +36,7 @@ const Overview = () => {
 
       {userData && (
         <main className='flex gap-6 mx-32 my-8'>
-          {/* <LeftBar /> */}
+          {/* <ProfileSideBar /> */}
           <div className='grow'>
             <Repositories />
             <div className='h-8'></div>

@@ -11,6 +11,10 @@ interface GithubContextType {
   // setCurrentTab: (tab: string) => void;
   userData: any;
   setUserData: (data: any) => void;
+  selectedYear: number;
+  setSelectedYear: (year: number) => void;
+  contributions: any;
+  setContributions: (data: any) => void;
 }
 
 
@@ -21,6 +25,8 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
   const [userData, setUserData] = useState<any>(null);  
   // const [repositories, setRepositories] = useState<any[]>([]);
   // const [currentTab, setCurrentTab] = useState<string>("overview");
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+  const [contributions, setContributions] = useState(null)
 
   // console.log('====>',userData)
 
@@ -36,6 +42,10 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
         // setCurrentTab,
         userData,
         setUserData,
+        selectedYear,
+        setSelectedYear,
+        contributions,
+        setContributions,
       }}
     >
       {children}

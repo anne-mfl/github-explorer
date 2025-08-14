@@ -27,7 +27,7 @@ const Repositories = () => {
               <div className='flex flex-wrap items-center gap-2'>
                 {pinnedRepos.length > 0 && <FontAwesomeIcon icon={faBookBookmark} className='text-sm' />}
                 <h3 className='text-custom_blue hover:underline text-sm font-semibold'>
-                  <Link href={`/user/${userData?.user.login}/${repo.name}`}>
+                  <Link href={`/${userData?.user.login}/${repo.name}`}>
                     {repo.name}
                   </Link>
                 </h3>

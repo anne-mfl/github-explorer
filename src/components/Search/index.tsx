@@ -38,7 +38,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
   const handleNavigation = (userId: string) => {
     setUserId(userId)
     setInputValue('')
-    router.push(`/user/${userId}`);
+    router.push(`/${userId}`);
   }
 
 

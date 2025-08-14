@@ -1,102 +1,41 @@
-import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
 import { useGithubContext } from 'context/GithubContext'
-import { useLazyQuery } from '@apollo/client'
-import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../query'
 
-const Contributions = () => {
-  const { userData } = useGithubContext()
-  const { userId } = useParams() as { userId: string }
+const ContributionHeatmap = () => {
+  const { contributions } = useGithubContext()
 
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
-  // const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
-  type ContributionDay = {
-    date: string;
-    contributionCount: number;
-    color: string;
-  };
+  // type ContributionDay = {
+  //   date: string;
+  //   contributionCount: number;
+  //   color: string;
+  // };
 
-  type ContributionWeek = {
-    contributionDays: ContributionDay[];
-  };
+  // type ContributionWeek = {
+  //   contributionDays: {
+  //     date: string;
+  //     contributionCount: number;
+  //     color: string;
+  //   }[];
+  // };
 
-  type ContributionCalendar = {
-    totalContributions: number;
-    weeks: ContributionWeek[];
-  };
+  // type ContributionCalendar = {
+  //   totalContributions: number;
+  //   weeks: {
+  //     contributionDays: {
+  //       date: string;
+  //       contributionCount: number;
+  //       color: string;
+  //     }[];
+  //   }[];
+  // };
 
-  const [contributionCalendar, setContributionCalendar] = useState<ContributionCalendar | null>(null)
 
-  // Set initial calendar from userData
-  useEffect(() => {
-    if (userData?.user?.contributionsCollection?.contributionCalendar) {
-      setContributionCalendar(userData.user.contributionsCollection.contributionCalendar)
-    }
-  }, [userData])
 
-  const createdYear = userData?.user?.createdAt ? new Date(userData.user.createdAt).getFullYear() : null
-  const currentYearNum = new Date().getFullYear()
-  const years = createdYear
-    ? Array.from({ length: currentYearNum - createdYear + 1 }, (_, i) => currentYearNum - i)
-    : []
-
-  const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
-
-  // When selectedYear changes, fetch contributions for that year
-  useEffect(() => {
-    if (selectedYear !== new Date().getFullYear()) {
-      
-      const to = new Date(`${selectedYear}-12-31T23:59:59Z`);
-      const from = new Date(to);
-      from.setUTCDate(from.getUTCDate() - 365);
-
-      fetchYearContributions({
-        variables: {
-          userId: userId,
-          from: from.toISOString(),
-          to: to.toISOString(),
-        },
-      })
-    } else if (userData?.user?.contributionsCollection?.contributionCalendar) {
-      setContributionCalendar(userData.user.contributionsCollection.contributionCalendar)
-    }
-  }, [selectedYear, userId, fetchYearContributions, userData])
-  // useEffect(() => {
-  //   if (selectedYear !== new Date().getFullYear()) {
-  //     fetchYearContributions({
-  //       variables: {
-  //         userId: userId,
-  //         from: `${selectedYear}-01-01T00:00:00Z`,
-  //         to: `${selectedYear}-12-31T23:59:59Z`,
-  //       },
-  //     })
-  //   } else if (userData?.user?.contributionsCollection?.contributionCalendar) {
-  //     setContributionCalendar(userData.user.contributionsCollection.contributionCalendar)
-  //   }
-  // }, [selectedYear, userId, fetchYearContributions, userData])
-
-  // When userQueryData is fetched, update contributionCalendar
-  useEffect(() => {
-    if (userQueryData?.user?.contributionsCollection?.contributionCalendar && !loading && !error) {
-      setContributionCalendar(userQueryData.user.contributionsCollection.contributionCalendar)
-    }
-  }, [userQueryData, loading, error])
-
-  console.log(contributionCalendar)
+  const contributionCalendar = contributions?.contributionCalendar
 
   return (
     <div>
       <p className='mb-2 text-base'>{contributionCalendar?.totalContributions.toLocaleString()} contributions in the last year</p>
-      <div className='flex mb-4'>
-        {years.map((year) => (
-          <div key={year}>
-            <button
-              className={`${selectedYear === year && 'bg-custom_blue text-white'} px-2 py-1 rounded cursor-pointer`}
-              onClick={() => setSelectedYear(year)}
-            >{year}</button>
-          </div>
-        ))}
-      </div>
+
       <main className='border border-custom_border_grey rounded px-4 text-xs w-full'>
         <table className='flex items-start overflow-x-auto py-3'>
           <thead className='mr-1.5'>
@@ -178,4 +117,4 @@ const Contributions = () => {
   )
 }
 
-export default Contributions
+export default ContributionHeatmap

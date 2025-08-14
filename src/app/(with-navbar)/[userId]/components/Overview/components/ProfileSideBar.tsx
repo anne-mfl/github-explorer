@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faEnvelope, faLink, faBuilding, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
-const LeftBar = () => {
+const ProfileSideBar = () => {
 
   const { userData } = useGithubContext();
   if (!userData) {
@@ -102,4 +102,4 @@ const LeftBar = () => {
   )
 }
 
-export default LeftBar
+export default ProfileSideBar
