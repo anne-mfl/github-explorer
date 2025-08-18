@@ -36,7 +36,7 @@ const Overview = () => {
 
       {userData && (
         <main className='flex gap-6 mx-32 my-8'>
-          {/* <ProfileSideBar /> */}
+          <ProfileSideBar />
           <div className='grow'>
             <Repositories />
             <div className='h-8'></div>
