@@ -24,14 +24,16 @@ const Repositories = () => {
           <section key={repo.id} className='flex flex-col border border-custom_border_grey rounded p-4 text-xs text-custom_grey'>
 
             <div className=''>
-              <div className='flex flex-wrap items-center gap-2'>
+              <div className='flex flex-wrap justify-between items-center gap-2'>
+                <div className='flex gap-2 items-center'>
                 {pinnedRepos.length > 0 && <FontAwesomeIcon icon={faBookBookmark} className='text-sm' />}
                 <h3 className='text-custom_blue hover:underline text-sm font-semibold'>
                   <Link href={`/${userData?.user.login}/${repo.name}`}>
                     {repo.name}
                   </Link>
                 </h3>
-                {!repo.isPrivate && <span className='border border-custom_border_grey rounded-full py-0.2 px-1.5'>Public</span>}
+                </div>
+                {!repo.isPrivate && <span className='border border-custom_border_grey rounded-full py-0.2 px-1.5 font-medium leading-[18px]'>Public</span>}
               </div>
             </div>
 

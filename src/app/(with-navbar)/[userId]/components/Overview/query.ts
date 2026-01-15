@@ -150,8 +150,8 @@ export const GET_USER_OVERVIEW = gql`
           avatarUrl
           url
         }
-      }
-      
+      } 
+
       # Recent activity (issues and pull requests)
       issues(first: 5, orderBy: { field: UPDATED_AT, direction: DESC }, states: [OPEN, CLOSED]) {
         nodes {

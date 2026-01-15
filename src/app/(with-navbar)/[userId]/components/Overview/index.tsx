@@ -40,7 +40,7 @@ const Overview = () => {
           <div className='grow'>
             <Repositories />
             <div className='h-8'></div>
-            <Contributions />
+            <Contributions/>
           </div>
         </main>
       )}

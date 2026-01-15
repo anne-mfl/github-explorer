@@ -1,6 +1,8 @@
 "use client"
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { ApolloError } from '@apollo/client';
+
 
 interface GithubContextType {
   userId: string;
@@ -15,6 +17,10 @@ interface GithubContextType {
   setSelectedYear: (year: number) => void;
   contributions: any;
   setContributions: (data: any) => void;
+  isLoadingContributions: boolean;
+  setIsLoadingContributions: (data: boolean) => void;
+  contributionsError: ApolloError | undefined;
+  setContributionsError: (error: ApolloError | undefined) => void;
 }
 
 
@@ -22,11 +28,13 @@ const GithubContext = createContext<GithubContextType | undefined>(undefined);
 
 export const GithubProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState("");
-  const [userData, setUserData] = useState<any>(null);  
+  const [userData, setUserData] = useState<any>(null);
   // const [repositories, setRepositories] = useState<any[]>([]);
   // const [currentTab, setCurrentTab] = useState<string>("overview");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [contributions, setContributions] = useState(null)
+  const [isLoadingContributions, setIsLoadingContributions] = useState(false)
+  const [contributionsError, setContributionsError] = useState<ApolloError | undefined>(undefined)
 
   // console.log('====>',userData)
 
@@ -46,6 +54,10 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
         setSelectedYear,
         contributions,
         setContributions,
+        isLoadingContributions,
+        setIsLoadingContributions,
+        contributionsError,
+        setContributionsError,
       }}
     >
       {children}

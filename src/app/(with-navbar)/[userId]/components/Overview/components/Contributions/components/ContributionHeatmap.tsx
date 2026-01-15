@@ -1,7 +1,8 @@
 import { useGithubContext } from 'context/GithubContext'
+import Link from 'next/link'
 
 const ContributionHeatmap = () => {
-  const { contributions } = useGithubContext()
+  const { contributions, selectedYear } = useGithubContext()
 
   // type ContributionDay = {
   //   date: string;
@@ -28,13 +29,13 @@ const ContributionHeatmap = () => {
   //   }[];
   // };
 
-
-
   const contributionCalendar = contributions?.contributionCalendar
+
+  
 
   return (
     <div>
-      <p className='mb-2 text-base'>{contributionCalendar?.totalContributions.toLocaleString()} contributions in the last year</p>
+      <p className='mb-2 text-base'>{contributionCalendar?.totalContributions.toLocaleString()} contributions in {selectedYear}</p>
 
       <main className='border border-custom_border_grey rounded-t px-4 text-xs w-full'>
         <table className='flex items-start overflow-x-auto py-3'>
@@ -101,7 +102,11 @@ const ContributionHeatmap = () => {
           </tbody>
         </table>
         <div className='flex justify-between text-custom_grey px-8 py-2'>
-          <p className='hover:text-custom_blue cursor-pointer'>Learn how we count contributions</p>
+          <p className='hover:text-custom_blue cursor-pointer'>
+            <Link href='https://docs.github.com/en/account-and-profile/how-tos/contribution-settings/troubleshooting-missing-contributions'>
+              Learn how we count contributions
+            </Link>
+          </p>
           <div className='flex items-center gap-1'>
             <p>Less</p>
             <span className='w-2.5 h-2.5 bg-[#EFF2F5] rounded-xs'>&nbsp;</span>
