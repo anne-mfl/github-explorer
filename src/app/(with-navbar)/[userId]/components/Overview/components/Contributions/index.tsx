@@ -6,14 +6,18 @@ import { useGithubContext } from 'context/GithubContext';
 import { useParams } from 'next/navigation'
 import { useLazyQuery } from '@apollo/client'
 import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../../query'
+import ActivityOverview from './components/ActivityOverview';
 
 
 const ContributionsIndex = () => {
 
-  const { userData, selectedYear, setSelectedYear, setContributions, isLoadingContributions, setIsLoadingContributions, contributionsError, setContributionsError } = useGithubContext();
+  const { userData, selectedYear, contributions, setContributions, isLoadingContributions, setIsLoadingContributions, contributionsError, setContributionsError } = useGithubContext();
   const { userId } = useParams() as { userId: string }
 
   const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
+
+  // const contributionCalendar = contributions?.contributionCalendar
+  const totalContributionsNumber = contributions?.contributionCalendar?.totalContributions.toLocaleString()
 
   useEffect(() => {
     setIsLoadingContributions(loading);
@@ -55,14 +59,22 @@ const ContributionsIndex = () => {
     );
   }
 
+
   return (
-    <div className='flex'>
-      <div>
-        <Heatmap />
-        <Radar />
+    <div>
+      <p className='mb-2 text-base'>{totalContributionsNumber} contributions in {selectedYear}</p>
+      <div className='flex'>
+        <div className='border border-custom_border_grey rounded h-fit'>
+          <Heatmap />
+          <div className='flex p-4 border-t border-custom_border_grey'>
+            <ActivityOverview />
+            <Radar />
+          </div>
+        </div>
+        <YearSelectionBar />
       </div>
-      <YearSelectionBar />
     </div>
+
   )
 }
 

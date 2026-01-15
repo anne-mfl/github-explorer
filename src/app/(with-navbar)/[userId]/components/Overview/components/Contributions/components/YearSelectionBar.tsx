@@ -44,7 +44,7 @@ const YearSelectionBar = () => {
   // }, [userQueryData, loading, error])
 
   return (
-    <div className='mb-4 ml-8 w-full'>
+    <div className='mb-4 ml-8 w-full sticky top-0'>
       {years.map((year) => (
         <div key={year}>
           <button

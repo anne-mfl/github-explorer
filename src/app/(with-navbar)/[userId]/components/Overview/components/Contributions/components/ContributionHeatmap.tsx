@@ -31,13 +31,12 @@ const ContributionHeatmap = () => {
 
   const contributionCalendar = contributions?.contributionCalendar
 
-  
 
   return (
     <div>
-      <p className='mb-2 text-base'>{contributionCalendar?.totalContributions.toLocaleString()} contributions in {selectedYear}</p>
+      {/* <p className='mb-2 text-base'>{contributionCalendar?.totalContributions.toLocaleString()} contributions in {selectedYear}</p> */}
 
-      <main className='border border-custom_border_grey rounded-t px-4 text-xs w-full'>
+      <main className=' px-4 text-xs w-full'>
         <table className='flex items-start overflow-x-auto py-3'>
           <thead className='mr-1.5'>
             <tr className='flex flex-col items-start gap-0.5 [&>th]:font-normal [&>th]:h-2.5'>
