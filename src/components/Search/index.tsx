@@ -48,7 +48,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
       setIsModalOpen(inputValue !== '');
     }
   }, [inputValue, isInNavbar]);
-
+    
   // Close modal when clicking outside or pressing escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

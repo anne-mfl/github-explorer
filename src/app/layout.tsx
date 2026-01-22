@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Search and explore GitHub users and repositories",
 };
 
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">

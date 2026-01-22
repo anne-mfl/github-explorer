@@ -31,7 +31,6 @@ const ContributionHeatmap = () => {
 
   const contributionCalendar = contributions?.contributionCalendar
 
-
   return (
     <div>
       {/* <p className='mb-2 text-base'>{contributionCalendar?.totalContributions.toLocaleString()} contributions in {selectedYear}</p> */}

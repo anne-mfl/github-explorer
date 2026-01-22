@@ -21,6 +21,8 @@ interface GithubContextType {
   setIsLoadingContributions: (data: boolean) => void;
   contributionsError: ApolloError | undefined;
   setContributionsError: (error: ApolloError | undefined) => void;
+  isLastYearView: boolean; // new field
+  setIsLastYearView: (isLastYear: boolean) => void; // new field
 }
 
 
@@ -35,6 +37,7 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
   const [contributions, setContributions] = useState(null)
   const [isLoadingContributions, setIsLoadingContributions] = useState(false)
   const [contributionsError, setContributionsError] = useState<ApolloError | undefined>(undefined)
+  const [isLastYearView, setIsLastYearView] = useState(true) // default to "last year" view
 
   // console.log('====>',userData)
 
@@ -58,6 +61,8 @@ export const GithubProvider = ({ children }: { children: ReactNode }) => {
         setIsLoadingContributions,
         contributionsError,
         setContributionsError,
+        isLastYearView,
+        setIsLastYearView,
       }}
     >
       {children}

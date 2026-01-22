@@ -6,7 +6,13 @@ import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../../../query'
 
 const YearSelectionBar = () => {
 
-  const { userData, selectedYear, setSelectedYear, setContributions, setIsLoadingContributions, setContributionsError } = useGithubContext();
+  const {
+    userData,
+    selectedYear,
+    setSelectedYear,
+    isLastYearView,
+    setIsLastYearView
+  } = useGithubContext();
   // const { userId } = useParams() as { userId: string }
 
   const createdYear = userData?.user?.createdAt ? new Date(userData.user.createdAt).getFullYear() : null
@@ -14,6 +20,15 @@ const YearSelectionBar = () => {
   const years = createdYear
     ? Array.from({ length: currentYearNum - createdYear + 1 }, (_, i) => currentYearNum - i)
     : []
+
+  const handleYearClick = (year: number) => {
+    setSelectedYear(year);
+    setIsLastYearView(false); // Switch to calendar year view when a year is clicked
+  }
+
+  const handleLastYearClick = () => {
+    setIsLastYearView(true);
+  }
 
   // const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
 
@@ -50,7 +65,10 @@ const YearSelectionBar = () => {
           <button
             className={`${selectedYear === year ? 'bg-custom_blue text-white' : 'hover:bg-navbar_background'}
             text-xs px-4 py-2 mb-2 rounded !cursor-pointer w-full text-left`}
-            onClick={() => setSelectedYear(year)}
+            onClick={() => {
+              // setSelectedYear(year)
+              handleYearClick(year)
+            }}
           >{year}</button>
         </div>
       ))}
