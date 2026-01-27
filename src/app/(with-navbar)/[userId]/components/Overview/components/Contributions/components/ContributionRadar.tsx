@@ -107,7 +107,7 @@ const ContributionRadar = () => {
 
 
   return (
-    <div className='p-4'>
+    <div className='p-4 flex-auto'>
 
       <div style={{ width: '300px', height: '200px' }}>
         <Radar data={data} options={options} />

@@ -13,7 +13,6 @@ const YearSelectionBar = () => {
     isLastYearView,
     setIsLastYearView
   } = useGithubContext();
-  // const { userId } = useParams() as { userId: string }
 
   const createdYear = userData?.user?.createdAt ? new Date(userData.user.createdAt).getFullYear() : null
   const currentYearNum = new Date().getFullYear()
@@ -26,47 +25,14 @@ const YearSelectionBar = () => {
     setIsLastYearView(false); // Switch to calendar year view when a year is clicked
   }
 
-  const handleLastYearClick = () => {
-    setIsLastYearView(true);
-  }
-
-  // const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
-
-  // Update context when loading/error states change
-  // useEffect(() => {
-  //   setIsLoadingContributions(loading);
-  //   setContributionsError(error);
-  // }, [loading, error, setIsLoadingContributions, setContributionsError])
-
-  // useEffect(() => {
-  //   const to = new Date(`${selectedYear}-12-31T23:59:59Z`);
-  //   const from = new Date(`${selectedYear}-01-01T00:00:00Z`);
-  //   fetchYearContributions({
-  //     variables: {
-  //       userId: userId,
-  //       from: from.toISOString(),
-  //       to: to.toISOString(),
-  //     },
-  //   })
-  // }, [selectedYear, userId, fetchYearContributions])
-
-
-  // When userQueryData is fetched, update contributionCalendar
-  // useEffect(() => {
-  //   if (userQueryData?.user?.contributionsCollection?.contributionCalendar && !loading && !error) {
-  //     setContributions(userQueryData.user.contributionsCollection)
-  //   }
-  // }, [userQueryData, loading, error])
-
   return (
-    <div className='mb-4 ml-8 w-full sticky top-0'>
+    <div className='mb-4 ml-6 sticky top-0'>
       {years.map((year) => (
         <div key={year}>
           <button
             className={`${selectedYear === year ? 'bg-custom_blue text-white' : 'hover:bg-navbar_background'}
-            text-xs px-4 py-2 mb-2 rounded !cursor-pointer w-full text-left`}
+            text-xs px-4 py-2 mb-2 rounded !cursor-pointer min-w-[84px] w-full text-left`}
             onClick={() => {
-              // setSelectedYear(year)
               handleYearClick(year)
             }}
           >{year}</button>

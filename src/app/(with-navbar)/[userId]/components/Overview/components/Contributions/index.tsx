@@ -38,18 +38,6 @@ const ContributionsIndex = () => {
     setContributionsError(error);
   }, [loading, error, setIsLoadingContributions, setContributionsError])
 
-  // useEffect(() => {
-  //   const to = new Date(`${selectedYear}-12-31T23:59:59Z`);
-  //   const from = new Date(`${selectedYear}-01-01T00:00:00Z`);
-  //   fetchYearContributions({
-  //     variables: {
-  //       userId: userId,
-  //       from: from.toISOString(),
-  //       to: to.toISOString(),
-  //     },
-  //   })
-  // }, [selectedYear, userId, fetchYearContributions])
-
   useEffect(() => {
     let from: Date;
     let to: Date;
@@ -82,14 +70,6 @@ const ContributionsIndex = () => {
     }
   }, [userQueryData, loading, error])
 
-
-  // if (isLoadingContributions) {
-  //   return (
-  //     <main className='px-4 text-xs w-full flex items-center justify-center py-20'>
-  //       <div className="loading loading-spinner loading-lg"></div>
-  //     </main>
-  //   );
-  // }
   if (isLoadingContributions || !hasLoadedOnce) {
     return (
       <main className='px-4 text-xs w-full flex items-center justify-center py-20'>
@@ -108,17 +88,19 @@ const ContributionsIndex = () => {
 
 
   return (
-    <div>
+    <div className=''>
       <p className='mb-2 text-base'>{totalContributionsNumber} contributions in {isLastYearView ? 'the last year' : selectedYear}</p>
-      <div className='flex'>
-        <div className='border border-custom_border_grey rounded h-fit'>
+      <div className='flex w-full min-w-0'>
+        <div className='border border-custom_border_grey rounded flex-1 min-w-0 max-w-min'>
           <Heatmap />
           <div className='flex p-4 border-t border-custom_border_grey'>
             <ActivityOverview />
             <Radar />
           </div>
         </div>
-        <YearSelectionBar />
+        <div className=''>
+          <YearSelectionBar />
+        </div>
       </div>
     </div>
 

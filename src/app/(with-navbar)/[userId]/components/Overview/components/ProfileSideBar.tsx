@@ -14,7 +14,7 @@ const ProfileSideBar = () => {
   }
 
   return (
-    <div className='w-74'>
+    <div className='min-w-74'>
 
       <div className='relative w-full aspect-square'>
         <Image
