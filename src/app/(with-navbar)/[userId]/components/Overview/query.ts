@@ -20,6 +20,7 @@ query GetContributionForSpecificYear(
           name
           owner{
             login
+            avatarUrl
           }
           nameWithOwner
           url
