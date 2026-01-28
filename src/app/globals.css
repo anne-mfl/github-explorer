@@ -21,5 +21,9 @@
   .primary_button {
     @apply hover:bg-hover_grey rounded-lg cursor-pointer 
   }
+
+  .link_button {
+    @apply text-custom_blue hover:underline cursor-pointer font-semibold
+  }
 }
 

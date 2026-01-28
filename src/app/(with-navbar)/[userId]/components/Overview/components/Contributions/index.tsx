@@ -95,7 +95,7 @@ const ContributionsIndex = () => {
     <div className=''>
       <p className='mb-2 text-base'>{totalContributionsNumber} contributions in {isLastYearView ? 'the last year' : selectedYear}</p>
       <div className='flex w-full min-w-0'>
-        <div className='border border-custom_border_grey rounded flex-1 min-w-0 max-w-min'>
+        <div className='border border-custom_border_grey rounded flex-1 min-w-0 max-w-min h-fit'>
           <Heatmap />
           <div className='flex p-4 border-t border-custom_border_grey'>
             <ActivityOverview />

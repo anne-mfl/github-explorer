@@ -21,43 +21,45 @@ const Repositories = () => {
       </h2>
       <div className='grid grid-cols-2 gap-3'>
         {(pinnedRepos.length > 0 ? pinnedRepos : normalRepos.slice(0, 6)).map((repo: Repo) => (
-          <section key={repo.id} className='flex flex-col border border-custom_border_grey rounded p-4 text-xs text-custom_grey'>
+          <section key={repo?.id} className='flex flex-col border border-custom_border_grey rounded p-4 text-xs text-custom_grey'>
 
             <div className=''>
               <div className='flex flex-wrap justify-between items-center gap-2'>
                 <div className='flex gap-2 items-center'>
                   {pinnedRepos.length > 0 && <FontAwesomeIcon icon={faBookBookmark} className='text-sm' />}
-                  <h3 className='text-custom_blue hover:underline text-sm font-semibold'>
-                    <Link href={`/${userData?.user.login}/${repo.name}`}>
-                      {repo.name}
+                  <h3 className='link_button text-sm'>
+                    <Link href={`/${userData?.user?.login}/${repo?.name}`}>
+                      {repo?.name}
                     </Link>
                   </h3>
                 </div>
-                {!repo.isPrivate && <span className='border border-custom_border_grey rounded-full py-0.2 px-1.5 font-medium leading-[18px]'>Public</span>}
+                {!repo?.isPrivate && <span className='border border-custom_border_grey rounded-full py-0.2 px-1.5 font-medium leading-[18px]'>Public</span>}
               </div>
             </div>
 
-            <p className='mt-2 grow'>{repo.description ?? ''}</p>
+            <p className='mt-2 grow'>{repo?.description ?? ''}</p>
 
             <div className='flex items-center gap-4 mt-2'>
-              <span className='flex items-center gap-1'>
-                <span style={{ backgroundColor: repo.primaryLanguage.color }} className='h-3 w-3 rounded-full'>&nbsp;</span>
-                {repo.primaryLanguage.name}
-              </span>
+              {repo?.primaryLanguage && (
+                <span className='flex items-center gap-1'>
+                  <span style={{ backgroundColor: repo.primaryLanguage.color ?? '#ccc' }} className='h-3 w-3 rounded-full'>&nbsp;</span>
+                  {repo.primaryLanguage.name}
+                </span>
+              )}
 
-              {repo.stargazerCount > 0 &&
+              {(repo?.stargazerCount ?? 0) > 0 && (
                 <span>
                   <FontAwesomeIcon icon={faStar} className='mr-1' />
-                  {repo.stargazerCount > 0 && repo.stargazerCount}
+                  {repo.stargazerCount}
                 </span>
-              }
-              {repo.forkCount > 0 &&
+              )}
+
+              {(repo?.forkCount ?? 0) > 0 && (
                 <span>
                   <FontAwesomeIcon icon={faCodeFork} className='mr-1' />
-                  {repo.forkCount > 0 && repo.forkCount}
+                  {repo.forkCount}
                 </span>
-              }
-
+              )}
             </div>
 
           </section>

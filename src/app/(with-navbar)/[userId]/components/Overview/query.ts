@@ -13,6 +13,23 @@ query GetContributionForSpecificYear(
         totalPullRequestContributions
         totalPullRequestReviewContributions
         totalRepositoryContributions
+
+        # Repositories you're most active in
+      commitContributionsByRepository(maxRepositories: 100) {
+        repository {
+          name
+          owner{
+            login
+          }
+          nameWithOwner
+          url
+        }
+        contributions {
+          totalCount
+        }
+      }
+      
+      # Contribution calendar (the heatmap graph)
         contributionCalendar {
           totalContributions
           weeks {
