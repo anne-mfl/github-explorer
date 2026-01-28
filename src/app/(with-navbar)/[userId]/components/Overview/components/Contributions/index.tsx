@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation'
 import { useLazyQuery } from '@apollo/client'
 import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../../query'
 import ActivityOverview from './components/ActivityOverview';
+import type { GetContributionForSpecificYearQuery, GetContributionForSpecificYearQueryVariables } from '@/types/github-generated'
 
 
 const ContributionsIndex = () => {
@@ -28,7 +29,10 @@ const ContributionsIndex = () => {
   const { userId } = useParams() as { userId: string }
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
-  const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
+  const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery<
+    GetContributionForSpecificYearQuery,
+    GetContributionForSpecificYearQueryVariables
+  >(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
 
   // const contributionCalendar = contributions?.contributionCalendar
   const totalContributionsNumber = contributions?.contributionCalendar?.totalContributions.toLocaleString()

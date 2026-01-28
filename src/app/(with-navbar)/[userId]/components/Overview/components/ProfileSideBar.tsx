@@ -13,6 +13,9 @@ const ProfileSideBar = () => {
     return <div>Loading...</div>;
   }
 
+  type Organization = typeof userData.user.organizations.nodes[number];
+
+
   return (
     <div className='min-w-74'>
 
@@ -82,7 +85,7 @@ const ProfileSideBar = () => {
         <div className='border-t border-custom_border_grey my-4 py-4'>
           <h3 className='text-base mb-2 font-semibold'>Organizations</h3>
           <div className='flex flex-wrap gap-0.5'>
-            {userData?.user.organizations.nodes.map((organization) => {
+            {userData?.user.organizations.nodes.map((organization: Organization) => {
               // console.log(organization)
               return <Link key={organization.id} href={`https://github.com/${organization.login}`}>
                 <Image

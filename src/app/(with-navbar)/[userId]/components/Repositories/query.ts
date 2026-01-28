@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_USER_REPOSITORIES = gql`
-  query(
+  query GetUserRepositories(
   $userId: String!
   $first: Int = 20
   $after: String

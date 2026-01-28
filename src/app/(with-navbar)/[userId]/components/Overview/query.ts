@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_CONTRIBUTION_FOR_SPECIFIC_YEAR = gql`
-query(
+query GetContributionForSpecificYear(
     $userId: String!
     $from: DateTime
     $to: DateTime
@@ -30,7 +30,7 @@ query(
 
 
 export const GET_USER_OVERVIEW = gql`
-  query(
+  query GetUserOverview(
     $userId: String!
   ) {
     user(login: $userId) {

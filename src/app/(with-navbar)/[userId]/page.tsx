@@ -10,10 +10,10 @@ import { useGithubContext } from 'context/GithubContext';
 
 const User = () => {
 
-  const { userId } = useParams() as { userId: string };
+  // const { userId } = useParams() as { userId: string };
   const currentTab = useSearchParams().get("tab") || "overview";
 
-  const { setUserId, setUserData } = useGithubContext();
+  // const { setUserId, setUserData } = useGithubContext();
 
   return (
     <div>

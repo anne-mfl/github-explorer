@@ -1,8 +1,4 @@
-import { useEffect } from 'react'
-import { useParams } from 'next/navigation'
 import { useGithubContext } from 'context/GithubContext'
-import { useLazyQuery } from '@apollo/client'
-import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../../../query'
 
 const YearSelectionBar = () => {
 

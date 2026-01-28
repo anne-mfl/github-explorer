@@ -3,16 +3,16 @@ import { useGithubContext } from 'context/GithubContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookBookmark, faStar, faCodeFork } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
+import type { GetUserOverviewQuery } from '@/types/github-generated';
+
 
 const Repositories = () => {
 
   const { userData } = useGithubContext();
-  // if (!userData) {
-  //   return <div>Loading...</div>;
-  // }
-
   const pinnedRepos = userData?.user?.pinnedItems?.nodes || [];
   const normalRepos = userData?.user?.repositories?.nodes || [];
+
+  type Repo = typeof normalRepos[number];
 
   return (
     <div>
@@ -20,18 +20,18 @@ const Repositories = () => {
         {pinnedRepos.length > 0 ? 'Pinned' : 'Popular repositories'}
       </h2>
       <div className='grid grid-cols-2 gap-3'>
-        {(pinnedRepos.length > 0 ? pinnedRepos : normalRepos.slice(0, 6)).map((repo) => (
+        {(pinnedRepos.length > 0 ? pinnedRepos : normalRepos.slice(0, 6)).map((repo: Repo) => (
           <section key={repo.id} className='flex flex-col border border-custom_border_grey rounded p-4 text-xs text-custom_grey'>
 
             <div className=''>
               <div className='flex flex-wrap justify-between items-center gap-2'>
                 <div className='flex gap-2 items-center'>
-                {pinnedRepos.length > 0 && <FontAwesomeIcon icon={faBookBookmark} className='text-sm' />}
-                <h3 className='text-custom_blue hover:underline text-sm font-semibold'>
-                  <Link href={`/${userData?.user.login}/${repo.name}`}>
-                    {repo.name}
-                  </Link>
-                </h3>
+                  {pinnedRepos.length > 0 && <FontAwesomeIcon icon={faBookBookmark} className='text-sm' />}
+                  <h3 className='text-custom_blue hover:underline text-sm font-semibold'>
+                    <Link href={`/${userData?.user.login}/${repo.name}`}>
+                      {repo.name}
+                    </Link>
+                  </h3>
                 </div>
                 {!repo.isPrivate && <span className='border border-custom_border_grey rounded-full py-0.2 px-1.5 font-medium leading-[18px]'>Public</span>}
               </div>

@@ -30,7 +30,7 @@ const GithubContext = createContext<GithubContextType | undefined>(undefined);
 
 export const GithubProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState("");
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState(null);
   // const [repositories, setRepositories] = useState<any[]>([]);
   // const [currentTab, setCurrentTab] = useState<string>("overview");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())

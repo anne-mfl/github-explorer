@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useGithubContext } from 'context/GithubContext'
 import Link from 'next/link'
+import type { ContributionCalendarDay, ContributionCalendarWeek } from '@/types/github-generated'
+
 
 const ContributionHeatmap = () => {
   const { contributions, selectedYear, isLastYearView } = useGithubContext()
@@ -50,7 +52,7 @@ const ContributionHeatmap = () => {
             </tr>
           </thead>
           <tbody className='flex gap-[3px]'>
-            {contributionCalendar?.weeks.map((week, i) => {
+            {contributionCalendar?.weeks.map(({week, i}: {week:ContributionCalendarWeek, i: number}) => {
               const isFirstWeek = i === 0;
               const missingDays = isFirstWeek ? 7 - week.contributionDays.length : 0;
 
@@ -97,7 +99,7 @@ const ContributionHeatmap = () => {
                       <td key={`empty-${idx}`} className='w-2.5 h-2.5 rounded-xs'>&nbsp;</td>
                     ))
                   }
-                  {week.contributionDays.map((day) => (
+                  {week.contributionDays.map((day: ContributionCalendarDay) => (
                     <td
                       key={day.date}
                       className='w-2.5 h-2.5 rounded-xs border-[0.5] border-[#1f23280d] cursor-pointer'
