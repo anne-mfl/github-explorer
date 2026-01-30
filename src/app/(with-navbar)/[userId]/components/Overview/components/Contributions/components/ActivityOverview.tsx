@@ -23,7 +23,7 @@ const ActivityOverview = () => {
 
   return (
     <div className='border-r border-custom_border_grey pr-8 flex-auto'>
-      <h2 className='mb-4'>ActivityOverview</h2>
+      <h2 className='mb-4'>Activity Overview</h2>
 
       <div className='flex flex-wrap mb-2'>
         {uniqueOwners.map((repo: ContributedRepo) => (

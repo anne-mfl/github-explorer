@@ -5,7 +5,7 @@ import Heatmap from './components/ContributionHeatmap'
 import YearSelectionBar from './components/YearSelectionBar'
 import Radar from './components/ContributionRadar'
 import { useGithubContext } from 'context/GithubContext';
-import { useParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useLazyQuery } from '@apollo/client'
 import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../../query'
 import ActivityOverview from './components/ActivityOverview';
@@ -13,10 +13,14 @@ import type { GetContributionForSpecificYearQuery, GetContributionForSpecificYea
 
 
 const ContributionsIndex = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const { userId } = useParams() as { userId: string }
 
   const {
     userData,
     selectedYear,
+    setSelectedYear,
     contributions,
     setContributions,
     isLoadingContributions,
@@ -26,16 +30,65 @@ const ContributionsIndex = () => {
     isLastYearView,
     setIsLastYearView,
   } = useGithubContext();
-  const { userId } = useParams() as { userId: string }
+
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const [fetchYearContributions, { data: userQueryData, loading, error }] = useLazyQuery<
     GetContributionForSpecificYearQuery,
     GetContributionForSpecificYearQueryVariables
   >(GET_CONTRIBUTION_FOR_SPECIFIC_YEAR)
 
-  // const contributionCalendar = contributions?.contributionCalendar
   const totalContributionsNumber = contributions?.contributionCalendar?.totalContributions.toLocaleString()
+
+  // Initialize state from URL on mount (only once)
+  useEffect(() => {
+    const fromParam = searchParams.get('from')
+    const toParam = searchParams.get('to')
+
+    if (fromParam && toParam) {
+      const fromDate = new Date(fromParam)
+      const year = fromDate.getFullYear()
+      setSelectedYear(year)
+      setIsLastYearView(false)
+    } else {
+      // Default to last year view
+      setIsLastYearView(true)
+    }
+
+    setIsInitialized(true)
+  }, [])
+
+  // Update URL when year selection changes (only after initialization)
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const currentYear = new Date().getFullYear()
+    let newUrl = `/${userId}`
+
+    if (!isLastYearView) {
+      const params = new URLSearchParams()
+
+      // Add tab=overview for specific year views
+      params.set('tab', 'overview')
+
+      if (selectedYear === currentYear) {
+        // For current year, show from Jan 1 to today
+        const today = new Date()
+        params.set('from', `${selectedYear}-01-01`)
+        params.set('to', today.toISOString().split('T')[0])
+      } else {
+        // For past years, show full year
+        params.set('from', `${selectedYear}-01-01`)
+        params.set('to', `${selectedYear}-12-31`)
+      }
+
+      newUrl = `/${userId}?${params.toString()}`
+    }
+
+    // Update URL without page reload
+    router.push(newUrl, { scroll: false })
+  }, [selectedYear, isLastYearView, isInitialized, userId, router])
 
   useEffect(() => {
     setIsLoadingContributions(loading);
@@ -43,6 +96,8 @@ const ContributionsIndex = () => {
   }, [loading, error, setIsLoadingContributions, setContributionsError])
 
   useEffect(() => {
+    if (!isInitialized) return;
+
     let from: Date;
     let to: Date;
 
@@ -52,9 +107,20 @@ const ContributionsIndex = () => {
       from = new Date();
       from.setDate(from.getDate() - 365);
     } else {
-      // Show contributions for the selected calendar year
-      to = new Date(`${selectedYear}-12-31T23:59:59Z`);
+      // const currentYear = new Date().getFullYear()
+      // if (selectedYear === currentYear) {
+      //   // For current year, fetch until today
+      //   to = new Date()
+      //   from = new Date(selectedYear, 0, 1)
+      // } else {
+      //   // For past years, fetch full year
+      //   to = new Date(`${selectedYear}-12-31T23:59:59Z`);
+      //   from = new Date(`${selectedYear}-01-01T00:00:00Z`);
+      // }
+
+      // Show contributions for the selected calendar year (Jan 1 to Dec 31)
       from = new Date(`${selectedYear}-01-01T00:00:00Z`);
+      to = new Date(`${selectedYear}-12-31T23:59:59Z`);
     }
 
     fetchYearContributions({
@@ -64,15 +130,14 @@ const ContributionsIndex = () => {
         to: to.toISOString(),
       },
     })
-  }, [selectedYear, userId, fetchYearContributions, isLastYearView])
-
+  }, [selectedYear, userId, fetchYearContributions, isLastYearView, isInitialized])
 
   useEffect(() => {
     if (userQueryData?.user?.contributionsCollection?.contributionCalendar && !loading && !error) {
       setContributions(userQueryData.user.contributionsCollection)
       setHasLoadedOnce(true)
     }
-  }, [userQueryData, loading, error])
+  }, [userQueryData, loading, error, setContributions])
 
   if (isLoadingContributions || !hasLoadedOnce) {
     return (
@@ -90,7 +155,6 @@ const ContributionsIndex = () => {
     );
   }
 
-
   return (
     <div className=''>
       <p className='mb-2 text-base'>{totalContributionsNumber} contributions in {isLastYearView ? 'the last year' : selectedYear}</p>
@@ -107,7 +171,6 @@ const ContributionsIndex = () => {
         </div>
       </div>
     </div>
-
   )
 }
 
