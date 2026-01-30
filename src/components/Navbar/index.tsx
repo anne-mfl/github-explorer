@@ -1,7 +1,7 @@
 "use client"
 
 import Image from 'next/image'
-import mark from 'assets/mark.png'
+import GitHubLogo from 'assets/mark.png'
 import Search from 'components/Search'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -16,8 +16,8 @@ const Navbar = () => {
       <div className='flex items-center gap-2'>
         <Link href="/">
           <Image
-            src={mark}
-            alt="GitHub Explorer Logo"
+            src={GitHubLogo}
+            alt="GitHub Logo"
             width={32}
             height={32}
           />
