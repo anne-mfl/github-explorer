@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookBookmark, faMagnifyingGlass, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { useGithubContext } from "context/GithubContext";
 import { useRouter } from "next/navigation";
+import Loading from '../Loading';
 
 
 
@@ -48,7 +49,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
       setIsModalOpen(inputValue !== '');
     }
   }, [inputValue, isInNavbar]);
-    
+
   // Close modal when clicking outside or pressing escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -101,7 +102,10 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
 
   const SearchResults = () => (
     <>
-      {(userLoading && repoLoading) && <p className="px-4 py-2">Loading...</p>}
+      {(userLoading && repoLoading) &&
+      // <p className="px-4 py-2">Loading...</p>
+      <Loading />
+      }
 
       {userError && <p className="px-4 py-2 text-red-500">Users Error: {userError.message}</p>}
       {repoError && <p className="px-4 py-2 text-red-500">Repos Error: {repoError.message}</p>}

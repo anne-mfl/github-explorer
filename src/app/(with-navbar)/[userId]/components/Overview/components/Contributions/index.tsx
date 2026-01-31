@@ -10,6 +10,7 @@ import { useLazyQuery } from '@apollo/client'
 import { GET_CONTRIBUTION_FOR_SPECIFIC_YEAR } from '../../query'
 import ActivityOverview from './components/ActivityOverview';
 import type { GetContributionForSpecificYearQuery, GetContributionForSpecificYearQueryVariables } from '@/types/github-generated'
+import Loading from '@/components/Loading'
 
 
 const ContributionsIndex = () => {
@@ -141,9 +142,10 @@ const ContributionsIndex = () => {
 
   if (isLoadingContributions || !hasLoadedOnce) {
     return (
-      <main className='px-4 text-xs w-full flex items-center justify-center py-20'>
-        <div className="loading loading-spinner loading-lg"></div>
-      </main>
+      // <main className='px-4 text-xs w-full flex items-center justify-center py-20'>
+      //   <div className="loading loading-spinner loading-lg"></div>
+      // </main>
+      <Loading />
     );
   }
 

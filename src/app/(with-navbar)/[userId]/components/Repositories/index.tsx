@@ -2,6 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_USER_REPOSITORIES } from './query'
 import { useParams } from 'next/navigation';
+import Loading from '@/components/Loading';
 
 const Repositories = () => {
 
@@ -55,7 +56,7 @@ const Repositories = () => {
 
   return (
     <div>
-      {userLoading && <p>Loading...</p>}
+      {userLoading && <Loading />}
       {userError && <p>Error: {userError.message}</p>}
       {userRepositories && (
         <div>

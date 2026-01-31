@@ -28,9 +28,9 @@ const ActivityOverview = () => {
       <div className='flex flex-wrap mb-2'>
         {uniqueOwners.map((repo: ContributedRepo) => (
           <button
-           key={repo.repository.owner.login} 
-           className='flex p-1 pr-2 border border-custom_border_grey rounded mr-2 mb-2 items-center hover:bg-hover_grey'
-           >
+            key={repo.repository.owner.login}
+            className='flex p-1 pr-2 border border-custom_border_grey rounded mr-2 mb-2 items-center hover:bg-hover_grey cursor-pointer'
+          >
             <Image
               src={repo.repository.owner.avatarUrl}
               alt={repo.repository.owner.login}

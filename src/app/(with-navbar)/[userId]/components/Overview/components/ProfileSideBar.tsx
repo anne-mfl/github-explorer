@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faEnvelope, faLink, faBuilding, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import Loading from '@/components/Loading';
 
 const ProfileSideBar = () => {
 
   const { userData } = useGithubContext();
   if (!userData) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   type Organization = typeof userData.user.organizations.nodes[number];

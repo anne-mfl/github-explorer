@@ -6,6 +6,7 @@ import { useGithubContext } from 'context/GithubContext';
 import ProfileSideBar from './components/ProfileSideBar';
 import Repositories from './components/Repositories';
 import Contributions from './components/Contributions'
+import Loading from '@/components/Loading';
 
 const Overview = () => {
 
@@ -27,7 +28,7 @@ const Overview = () => {
 
   return (
     <div>
-      {userLoading && <p>Loading...</p>}
+      {userLoading && <Loading />}
       {userError && <p>Error: {userError.message}</p>}
 
       {userData && (
