@@ -29,7 +29,7 @@ const ActivityOverview = () => {
         {uniqueOwners.map((repo: ContributedRepo) => (
           <button
             key={repo.repository.owner.login}
-            className='flex p-1 pr-2 border border-custom_border_grey rounded mr-2 mb-2 items-center hover:bg-hover_grey cursor-pointer'
+            className='flex p-1 pr-2 border border-custom_border_grey rounded mr-2 mb-2 items-center hover:bg-hover_grey'
           >
             <Image
               src={repo.repository.owner.avatarUrl}

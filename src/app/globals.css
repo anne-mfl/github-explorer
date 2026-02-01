@@ -22,8 +22,12 @@
     @apply hover:bg-hover_grey rounded-lg cursor-pointer 
   }
 
+  .grey_button {
+    @apply bg-navbar_background border border-custom_border_grey rounded-md px-4 py-1 font-semibold cursor-pointer hover:bg-button_hover
+  }
+
   .link_button {
-    @apply text-custom_blue hover:underline cursor-pointer font-semibold
+    @apply text-custom_blue hover:underline cursor-pointer font-medium
   }
 }
 

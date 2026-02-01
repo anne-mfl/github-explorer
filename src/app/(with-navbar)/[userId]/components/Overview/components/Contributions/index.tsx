@@ -142,9 +142,6 @@ const ContributionsIndex = () => {
 
   if (isLoadingContributions || !hasLoadedOnce) {
     return (
-      // <main className='px-4 text-xs w-full flex items-center justify-center py-20'>
-      //   <div className="loading loading-spinner loading-lg"></div>
-      // </main>
       <Loading />
     );
   }
