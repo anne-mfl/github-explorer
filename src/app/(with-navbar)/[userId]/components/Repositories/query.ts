@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const GET_USER_REPOSITORIES = gql`
   query GetUserRepositories(
   $userId: String!
-  $first: Int = 20
+  $first: Int = 30
   $after: String
   $orderBy: RepositoryOrderField = UPDATED_AT
   $direction: OrderDirection = DESC

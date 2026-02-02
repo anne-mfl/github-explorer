@@ -1,7 +1,8 @@
 "use client"
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookOpen, faBookBookmark, faTableColumns, faCube, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faBookOpen, faBookBookmark, faTableColumns, faCube } from '@fortawesome/free-solid-svg-icons'
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useGithubContext } from 'context/GithubContext';

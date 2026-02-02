@@ -7,11 +7,13 @@
   --color-custom_light_grey: #D1D9E0B3;
   --color-custom_black: #1F2328;
   --color-custom_blue: #0969DA;
+  --color-custom_light_blue: #DDF4FF;
   --color-navbar_background: #F6F8FA;
   --color-hover_grey: #818B981A;
   --color-custom_orange: #FD8C73;
   --color-custom_border_grey: #D1D9E0;
   --color-button_hover: #EFF2F5;
+
 
   /* --font-gilroy: 'Gilroy', sans-serif;
   --font-playfair: 'Playfair Display', serif; */
@@ -28,6 +30,14 @@
 
   .link_button {
     @apply text-custom_blue hover:underline cursor-pointer font-medium
+  }
+
+  .link_secondary {
+    @apply hover:underline hover:text-custom_blue  cursor-pointer
+  }
+
+  .private_public_badge {
+    @apply border border-custom_border_grey rounded-full py-0.5 px-1.5 font-medium leading-[18px] text-xs ml-1
   }
 }
 

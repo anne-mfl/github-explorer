@@ -19,7 +19,7 @@ const ProfileSideBar = () => {
 
   return (
     <div className=''>
-      <div className='w-74'>
+      <div className='w-74 max-lg:min-w-12 max-lg:max-w-74'>
         <div className='relative w-full aspect-square'>
           <Image
             src={userData?.user?.avatarUrl}
@@ -51,7 +51,7 @@ const ProfileSideBar = () => {
           </p>
         </div>
 
-        <ul className='[&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-2 [&>li]:mb-2 [&>li>a]:hover:underline [&>li>a>span]:hover:text-custom_blue cursor-pointer'>
+        <ul className='[&>li]:flex [&>li]:items-center [&>li]:gap-2 [&>li>a]:flex [&>li>a]:items-center [&>li>a]:gap-2 [&>li]:mb-2 [&>li>a>span]:hover:underline [&>li>a>span]:hover:text-custom_blue cursor-pointer'>
           {userData?.user?.company &&
             <li>
               <FontAwesomeIcon icon={faBuilding} />

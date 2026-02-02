@@ -1,7 +1,8 @@
 import React from 'react'
 import { useGithubContext } from 'context/GithubContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookBookmark, faStar, faCodeFork } from '@fortawesome/free-solid-svg-icons'
+import { faBookBookmark, faCodeFork } from '@fortawesome/free-solid-svg-icons'
+import { faStar } from '@fortawesome/free-regular-svg-icons';
 import Link from 'next/link';
 import type { GetUserOverviewQuery } from '@/types/github-generated';
 
@@ -33,7 +34,10 @@ const Repositories = () => {
                     </Link>
                   </h3>
                 </div>
-                {!repo?.isPrivate && <span className='border border-custom_border_grey rounded-full py-0.2 px-1.5 font-medium leading-[18px]'>Public</span>}
+                {repo?.isPrivate
+                  ? <span className='private_public_badge'>Private</span>
+                  : <span className='private_public_badge'>Public</span>
+                }
               </div>
             </div>
 
@@ -48,7 +52,7 @@ const Repositories = () => {
               )}
 
               {(repo?.stargazerCount ?? 0) > 0 && (
-                <span>
+                <span className='flex items-center'>
                   <FontAwesomeIcon icon={faStar} className='mr-1' />
                   {repo.stargazerCount}
                 </span>
