@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_USER_REPOSITORIES } from './query'
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
@@ -21,12 +21,18 @@ const Repositories = () => {
   const currentPage = Number(searchParams.get('page')) || 1;
   const [cursorHistory, setCursorHistory] = useState<(string | null)[]>([null]);
 
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
+  const [selectedLanguage, setSelectedLanguage] = useState('all');
+  const [selectedSort, setSelectedSort] = useState('last-updated');
+
   const { data: userRepositories, loading: userLoading, error: userError, fetchMore } = useQuery(GET_USER_REPOSITORIES, {
     variables: {
       userId: userId,
       first: 30,
       after: null,
-      orderBy: "PUSHED_AT",
+      orderBy: "UPDATED_AT",
       direction: "DESC",
       ownerAffiliations: ["OWNER"]
     },
@@ -38,6 +44,57 @@ const Repositories = () => {
   const totalCount = userRepositories?.user?.repositories?.totalCount ?? 0;
 
   type Repo = typeof repos[number];
+
+  // Apply filters and sort client-side
+  const filteredRepos = useMemo(() => {
+    let result = [...repos];
+
+    // Search filter
+    if (searchTerm) {
+      result = result.filter(repo =>
+        repo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (repo.description?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
+      );
+    }
+
+    // Type filter
+    if (selectedType !== 'all') {
+      switch (selectedType) {
+        case 'sources':
+          result = result.filter(repo => !repo.isFork && !repo.isArchived);
+          break;
+        case 'forks':
+          result = result.filter(repo => repo.isFork);
+          break;
+        case 'archived':
+          result = result.filter(repo => repo.isArchived);
+          break;
+        case 'mirrors':
+          // GitHub GraphQL doesn't have isMirror easily, filter as needed
+          break;
+      }
+    }
+
+    // Language filter
+    if (selectedLanguage !== 'all') {
+      result = result.filter(repo => repo.primaryLanguage?.name === selectedLanguage);
+    }
+
+    // Sort
+    switch (selectedSort) {
+      case 'last-updated':
+        result.sort((a, b) => new Date(b.pushedAt ?? 0).getTime() - new Date(a.pushedAt ?? 0).getTime());
+        break;
+      case 'stars':
+        result.sort((a, b) => b.stargazerCount - a.stargazerCount);
+        break;
+      case 'name':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+    }
+
+    return result;
+  }, [repos, searchTerm, selectedType, selectedLanguage, selectedSort]);
 
   useEffect(() => {
     if (currentPage === 1) return;
@@ -152,16 +209,32 @@ const Repositories = () => {
 
   return (
     <>
-      <RepoSearchBar />
+      <RepoSearchBar
+        repos={repos}
+        searchTerm={searchTerm}
+        selectedType={selectedType}
+        selectedLanguage={selectedLanguage}
+        selectedSort={selectedSort}
+        onSearchChange={setSearchTerm}
+        onTypeChange={setSelectedType}
+        onLanguageChange={setSelectedLanguage}
+        onSortChange={setSelectedSort}
+      />
 
       <ul className='text-custom_grey'>
-        {repos.map((repo: Repo) => (
-          <RepoCard
-            key={repo.id}
-            repo={repo}
-            sparklineData={commitData[repo.id] ?? new Array(52).fill(0)}
-          />
-        ))}
+        {filteredRepos.length > 0 ? (
+          filteredRepos.map((repo: Repo) => (
+            <RepoCard
+              key={repo.id}
+              repo={repo}
+              sparklineData={commitData[repo.id] ?? new Array(52).fill(0)}
+            />
+          ))
+        ) : (
+          <li className='py-8 text-center text-custom_grey'>
+            No repositories match your filters.
+          </li>
+        )}
       </ul>
 
       <RepoPagination
