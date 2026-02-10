@@ -10,7 +10,7 @@ interface RepoSparklineProps {
 const RepoSparkline = ({ data }: RepoSparklineProps) => {
   return (
     <section className='ml-16'>
-      <div className='flex'>
+      <div className='flex h-6.5'>
         <button className='grey_button rounded-none rounded-l-md font-normal text-xs flex items-center'>
           <FontAwesomeIcon icon={faStar} className='mr-2 w-4 h-4' />
           Star
@@ -19,8 +19,8 @@ const RepoSparkline = ({ data }: RepoSparklineProps) => {
           <FontAwesomeIcon icon={faCaretDown} />
         </button>
       </div>
-      <div className='h-15 flex items-center'>
-        <Sparklines data={data} width={150} height={24} margin={5}>
+      <div className='flex items-center mt-2'>
+        <Sparklines data={data} width={150} height={24} margin={2}>
           <SparklinesLine color="#3fb950" style={{ fill: "none", strokeWidth: 2 }} />
         </Sparklines>
       </div>

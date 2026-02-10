@@ -9,17 +9,18 @@ import RepoCard from './components/RepoCard';
 import RepoSearchBar from './components/RepoSearchBar';
 import RepoPagination from './components/RepoPagination';
 import { fetchCommitActivity } from '@/utils/fetchCommitActivity';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRectangleXmark } from '@fortawesome/free-solid-svg-icons';
 
+const REPOS_PER_PAGE = 30;
 
 const Repositories = () => {
-
   const [commitData, setCommitData] = useState<{ [key: string]: number[] }>({});
   const { userId } = useParams() as { userId: string };
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const currentPage = Number(searchParams.get('page')) || 1;
-  const [cursorHistory, setCursorHistory] = useState<(string | null)[]>([null]);
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,10 +28,11 @@ const Repositories = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('all');
   const [selectedSort, setSelectedSort] = useState('last-updated');
 
-  const { data: userRepositories, loading: userLoading, error: userError, fetchMore } = useQuery(GET_USER_REPOSITORIES, {
+  // Fetch ALL repositories at once
+  const { data: userRepositories, loading: userLoading, error: userError } = useQuery(GET_USER_REPOSITORIES, {
     variables: {
       userId: userId,
-      first: 30,
+      first: 100, // Adjust based on expected repo count
       after: null,
       orderBy: "UPDATED_AT",
       direction: "DESC",
@@ -39,15 +41,14 @@ const Repositories = () => {
     fetchPolicy: 'cache-first',
   });
 
-  const repos = userRepositories?.user?.repositories?.nodes ?? [];
-  const pageInfo = userRepositories?.user?.repositories?.pageInfo;
+  const allRepos = userRepositories?.user?.repositories?.nodes ?? [];
   const totalCount = userRepositories?.user?.repositories?.totalCount ?? 0;
 
-  type Repo = typeof repos[number];
+  type Repo = typeof allRepos[number];
 
-  // Apply filters and sort client-side
+  // Apply filters and sort to ALL repos
   const filteredRepos = useMemo(() => {
-    let result = [...repos];
+    let result = [...allRepos];
 
     // Search filter
     if (searchTerm) {
@@ -70,7 +71,6 @@ const Repositories = () => {
           result = result.filter(repo => repo.isArchived);
           break;
         case 'mirrors':
-          // GitHub GraphQL doesn't have isMirror easily, filter as needed
           break;
       }
     }
@@ -94,31 +94,30 @@ const Repositories = () => {
     }
 
     return result;
-  }, [repos, searchTerm, selectedType, selectedLanguage, selectedSort]);
+  }, [allRepos, searchTerm, selectedType, selectedLanguage, selectedSort]);
 
+  // Client-side pagination on filtered results
+  const paginatedRepos = useMemo(() => {
+    const startIndex = (currentPage - 1) * REPOS_PER_PAGE;
+    return filteredRepos.slice(startIndex, startIndex + REPOS_PER_PAGE);
+  }, [filteredRepos, currentPage]);
+
+  const totalPages = Math.ceil(filteredRepos.length / REPOS_PER_PAGE);
+  const hasNextPage = currentPage < totalPages;
+
+  // Reset to page 1 when filters change
   useEffect(() => {
-    if (currentPage === 1) return;
-
-    const targetCursorIndex = currentPage - 1;
-
-    if (cursorHistory[targetCursorIndex] !== undefined) {
-      fetchMore({
-        variables: {
-          after: cursorHistory[targetCursorIndex],
-        },
-        updateQuery: (_, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return _;
-          return fetchMoreResult;
-        },
-      });
+    if (currentPage !== 1) {
+      updateUrl(1);
     }
-  }, [currentPage]);
+  }, [searchTerm, selectedType, selectedLanguage, selectedSort]);
 
+  // Fetch commit activity for current page repos
   useEffect(() => {
     const fetchNewCommitActivities = async () => {
-      if (!repos.length) return;
+      if (!paginatedRepos.length) return;
 
-      const reposToFetch = repos.filter((repo: Repo) => !commitData[repo.id]);
+      const reposToFetch = paginatedRepos.filter((repo: Repo) => !commitData[repo.id]);
       if (reposToFetch.length === 0) return;
 
       const CONCURRENCY_LIMIT = 5;
@@ -144,7 +143,7 @@ const Repositories = () => {
     };
 
     fetchNewCommitActivities();
-  }, [repos, userId]);
+  }, [paginatedRepos, userId]);
 
   const updateUrl = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -159,58 +158,25 @@ const Repositories = () => {
     router.push(`/${userId}?${params.toString()}`, { scroll: false });
   };
 
-  const handleNextPage = async () => {
-    if (!pageInfo?.hasNextPage) return;
-
-    const nextPage = currentPage + 1;
-
-    const newHistory = [...cursorHistory];
-    if (nextPage - 1 >= newHistory.length) {
-      newHistory.push(pageInfo.endCursor);
-    }
-    setCursorHistory(newHistory);
-
-    await fetchMore({
-      variables: {
-        after: pageInfo.endCursor,
-      },
-      updateQuery: (_, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return _;
-        return fetchMoreResult;
-      },
-    });
-
-    updateUrl(nextPage);
+  const handleNextPage = () => {
+    if (!hasNextPage) return;
+    updateUrl(currentPage + 1);
     window.scrollTo({ top: 0 });
   };
 
-  const handlePreviousPage = async () => {
+  const handlePreviousPage = () => {
     if (currentPage === 1) return;
-
-    const prevPage = currentPage - 1;
-    const prevCursor = cursorHistory[prevPage - 1];
-
-    await fetchMore({
-      variables: {
-        after: prevCursor,
-      },
-      updateQuery: (_, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return _;
-        return fetchMoreResult;
-      },
-    });
-
-    updateUrl(prevPage);
+    updateUrl(currentPage - 1);
     window.scrollTo({ top: 0 });
   };
 
-  if (userLoading && repos.length === 0) return <Loading />;
+  if (userLoading && allRepos.length === 0) return <Loading />;
   if (userError) return <p className='text-red-500'>Error: {userError.message}</p>;
 
   return (
     <>
       <RepoSearchBar
-        repos={repos}
+        repos={allRepos}
         searchTerm={searchTerm}
         selectedType={selectedType}
         selectedLanguage={selectedLanguage}
@@ -221,9 +187,50 @@ const Repositories = () => {
         onSortChange={setSelectedSort}
       />
 
+      {(selectedType !== 'all' || selectedLanguage !== 'all' || searchTerm !== '') && (
+        <div className='border-b border-custom_light_grey py-4 flex justify-between items-center'>
+          <p>
+            <b>{filteredRepos.length}</b> results for&nbsp;
+            {selectedType !== 'all' && (
+              <b>{
+                selectedType === 'sources' ? 'source'
+                  : selectedType === 'forks' ? 'forked'
+                    : selectedType === 'can be sponsored' ? 'sponsorable'
+                      : selectedType === 'mirrors' ? 'mirror'
+                        : selectedType === 'templates' ? 'template'
+                          : selectedType
+              }&nbsp;
+              </b>
+            )}
+            repositories matching&nbsp;
+            {searchTerm !== '' && (
+              <b>{searchTerm}&nbsp;</b>
+            )}
+            {selectedLanguage !== 'all' && (
+              <span>written in <b>{selectedLanguage}&nbsp;</b></span>
+            )}
+            sorted by&nbsp;
+            {selectedSort && (
+              <b>{selectedSort === 'last-updated' ? 'last updated' : selectedSort}</b>
+            )}
+          </p>
+          <button
+            className='text-custom_grey hover:text-custom_blue cursor-pointer ml-4'
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedType('all');
+              setSelectedLanguage('all');
+              setSelectedSort('last-updated');
+            }}
+          >
+            <FontAwesomeIcon icon={faRectangleXmark} className=' w-4' /> Clear filter
+          </button>
+        </div>
+      )}
+
       <ul className='text-custom_grey'>
-        {filteredRepos.length > 0 ? (
-          filteredRepos.map((repo: Repo) => (
+        {paginatedRepos.length > 0 ? (
+          paginatedRepos.map((repo: Repo) => (
             <RepoCard
               key={repo.id}
               repo={repo}
@@ -231,17 +238,19 @@ const Repositories = () => {
             />
           ))
         ) : (
-          <li className='py-8 text-center text-custom_grey'>
-            No repositories match your filters.
+          <li className='py-8 text-center p-8 mt-8 font-semibold text-custom_black text-xl'>
+            {filteredRepos.length === 0
+              ? `${userId} doesn't have any repositories that match.`
+              : 'Loading...'}
           </li>
         )}
       </ul>
 
       <RepoPagination
         currentPage={currentPage}
-        hasNextPage={pageInfo?.hasNextPage ?? false}
+        hasNextPage={hasNextPage}
         isLoading={userLoading}
-        totalCount={totalCount}
+        totalCount={filteredRepos.length}
         onPrevious={handlePreviousPage}
         onNext={handleNextPage}
       />

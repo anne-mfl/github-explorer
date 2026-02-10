@@ -24,7 +24,7 @@ interface RepoCardProps {
 
 const RepoCard = ({ repo, sparklineData }: RepoCardProps) => {
   return (
-    <li className='py-6 border-b border-custom_light_grey flex justify-between'>
+    <li className='py-6 border-b border-custom_light_grey flex justify-between items-center'>
       <section>
         <div className='mb-1 flex items-center'>
           <Link href={repo.url} className='link_button text-xl'>{repo.name}</Link>

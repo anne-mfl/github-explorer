@@ -96,20 +96,6 @@ const RepoSearchBar = ({
           />
         </div>
       </div>
-
-      {(selectedType !== 'all' || selectedLanguage !== 'all') && (
-        <div className='border-b border-custom_light_grey py-4'>
-          {selectedType !== 'all' && (
-            <span className='text-sm text-custom_grey mr-4'>Type: {selectedType}</span>
-          )}
-          {selectedLanguage !== 'all' && (
-            <span className='text-sm text-custom_grey'>Language: {selectedLanguage}</span>
-          )}
-          {selectedSort && (
-            <span className='text-sm text-custom_grey ml-4'>Sort: {selectedSort}</span>
-          )}
-        </div>
-      )}
     </div>
   );
 };
