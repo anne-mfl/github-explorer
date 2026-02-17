@@ -17,9 +17,9 @@ interface RepoSearchBarProps {
   onTypeChange: (value: string) => void;
   onLanguageChange: (value: string) => void;
   onSortChange: (value: string) => void;
-  showTypeFilter?: boolean;
+  // showTypeFilter?: boolean;
   placeholder?: string;
-  sortOptions?: { label: string; value: string }[];
+  sortOptions: { label: string; value: string }[];
 }
 
 const TYPE_OPTIONS = [
@@ -39,7 +39,7 @@ export const REPO_SORT_OPTIONS = [
 export const STARS_SORT_OPTIONS = [
   { label: 'Recently starred', value: 'recently-starred' },
   { label: 'Recently active', value: 'last-updated' },
-  { label: 'Name', value: 'name' },
+  { label: 'Most stars', value: 'stars' },
 ];
 
 const RepoSearchBar = ({
@@ -52,9 +52,8 @@ const RepoSearchBar = ({
   onTypeChange,
   onLanguageChange,
   onSortChange,
-  showTypeFilter = true,
   placeholder = 'Find a repository...',
-  sortOptions = REPO_SORT_OPTIONS,
+  sortOptions,
 }: RepoSearchBarProps) => {
 
   const languageOptions = useMemo(() => {
@@ -85,14 +84,14 @@ const RepoSearchBar = ({
           className='h-8 border border-custom_light_grey rounded-lg w-96 pl-4 pr-10 mr-2'
         />
         <div className='flex gap-2'>
-          {showTypeFilter && (
+          {/* {showTypeFilter && ( */}
             <FilterDropdown
               label='Type'
               options={TYPE_OPTIONS}
               selectedValue={selectedType}
               onSelect={onTypeChange}
             />
-          )}
+          {/* )} */}
           <FilterDropdown
             label='Language'
             options={languageOptions}

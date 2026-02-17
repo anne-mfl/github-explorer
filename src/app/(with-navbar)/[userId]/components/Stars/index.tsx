@@ -24,6 +24,7 @@ const Stars = () => {
   const currentPage = Number(searchParams.get('page')) || 1;
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
   const [selectedLanguage, setSelectedLanguage] = useState('all');
   const [selectedSort, setSelectedSort] = useState('recently-starred');
 
@@ -32,8 +33,7 @@ const Stars = () => {
       userId,
       first: 100,
       after: null,
-      // STARRED_AT maps to recently-starred; switch to UPDATED_AT otherwise
-      orderBy: selectedSort === 'recently-starred' ? 'STARRED_AT' : 'UPDATED_AT',
+      orderBy: 'STARRED_AT',
       direction: 'DESC',
     },
     fetchPolicy: 'cache-first',
@@ -46,6 +46,7 @@ const Stars = () => {
   const filteredRepos = useMemo(() => {
     let result = [...allRepos];
 
+    // Search filter
     if (searchTerm) {
       result = result.filter(repo =>
         repo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -53,17 +54,41 @@ const Stars = () => {
       );
     }
 
+    // Type filter
+    if (selectedType !== 'all') {
+      switch (selectedType) {
+        case 'sources':
+          result = result.filter(repo => !repo.isFork && !repo.isArchived);
+          break;
+        case 'forks':
+          result = result.filter(repo => repo.isFork);
+          break;
+        case 'archived':
+          result = result.filter(repo => repo.isArchived);
+          break;
+        case 'mirrors':
+          break;
+      }
+    }
+
+    // Language filter
     if (selectedLanguage !== 'all') {
       result = result.filter(repo => repo.primaryLanguage?.name === selectedLanguage);
     }
 
-    // Client-side sort for name only (starred_at and updated_at come pre-sorted from API)
-    if (selectedSort === 'name') {
-      result.sort((a, b) => a.name.localeCompare(b.name));
+    // Sort
+    switch (selectedSort) {
+      case 'last-updated':
+        result.sort((a, b) => new Date(b.pushedAt ?? 0).getTime() - new Date(a.pushedAt ?? 0).getTime());
+        break;
+      case 'stars':
+        result.sort((a, b) => b.stargazerCount - a.stargazerCount);
+        break;
+      // 'recently-starred' comes pre-sorted from the API as STARRED_AT DESC, no action needed
     }
 
     return result;
-  }, [allRepos, searchTerm, selectedLanguage, selectedSort]);
+  }, [allRepos, searchTerm, selectedType, selectedLanguage, selectedSort]);
 
   const paginatedRepos = useMemo(() => {
     const startIndex = (currentPage - 1) * REPOS_PER_PAGE;
@@ -121,7 +146,7 @@ const Stars = () => {
     fetchNewCommitActivities();
   }, [paginatedRepos]);
 
-  const isFiltered = selectedLanguage !== 'all' || searchTerm !== '';
+  const isFiltered = selectedLanguage !== 'all' || searchTerm !== '' || selectedType !== 'all';
 
   if (loading && allRepos.length === 0) return <Loading />;
   if (error) return <p className='text-red-500'>Error: {error.message}</p>;
@@ -131,19 +156,18 @@ const Stars = () => {
       <RepoSearchBar
         repos={allRepos}
         searchTerm={searchTerm}
-        selectedType='all'
+        selectedType={selectedType}
         selectedLanguage={selectedLanguage}
         selectedSort={selectedSort}
         onSearchChange={setSearchTerm}
-        onTypeChange={() => { }}
+        onTypeChange={setSelectedType}
         onLanguageChange={setSelectedLanguage}
         onSortChange={setSelectedSort}
-        showTypeFilter={false}
         placeholder='Find a starred repository...'
         sortOptions={STARS_SORT_OPTIONS}
       />
 
-      {isFiltered && (
+      {/* {isFiltered && (
         <div className='border-b border-custom_light_grey py-4 flex justify-between items-center'>
           <p>
             <b>{filteredRepos.length}</b> starred repositories matching&nbsp;
@@ -156,6 +180,7 @@ const Stars = () => {
             className='text-custom_grey hover:text-custom_blue cursor-pointer ml-4'
             onClick={() => {
               setSearchTerm('');
+              setSelectedType('all');
               setSelectedLanguage('all');
               setSelectedSort('recently-starred');
             }}
@@ -163,23 +188,52 @@ const Stars = () => {
             <FontAwesomeIcon icon={faRectangleXmark} className='w-4' /> Clear filter
           </button>
         </div>
+      )} */}
+      {(selectedType !== 'all' || selectedLanguage !== 'all' || searchTerm !== '') && (
+        <div className='border-b border-custom_light_grey py-4 flex justify-between items-center'>
+          <p>
+            <b>{filteredRepos.length}</b> results for&nbsp;
+            {selectedType !== 'all' && (
+              <b>{
+                selectedType === 'sources' ? 'source'
+                  : selectedType === 'forks' ? 'forked'
+                    : selectedType === 'can be sponsored' ? 'sponsorable'
+                      : selectedType === 'mirrors' ? 'mirror'
+                        : selectedType === 'templates' ? 'template'
+                          : selectedType
+              }&nbsp;
+              </b>
+            )}
+            starred repositories&nbsp;
+            {searchTerm !== '' && (
+              <span>matching&nbsp;<b>{searchTerm}&nbsp;</b></span>
+            )}
+            {selectedLanguage !== 'all' && (
+              <span>written in <b>{selectedLanguage}&nbsp;</b></span>
+            )}
+            sorted by&nbsp;
+            {selectedSort && (
+              <b>{selectedSort === 'last-updated' ? 'Recently active' : selectedSort === 'recently-starred' ? 'Recently starred' : selectedSort === 'stars' ? 'Most stars' : selectedSort}</b>
+            )}
+          </p>
+          <button
+            className='text-custom_grey hover:text-custom_blue cursor-pointer ml-4'
+            onClick={() => {
+              setSearchTerm('');
+              setSelectedType('all');
+              setSelectedLanguage('all');
+              setSelectedSort('last-updated');
+            }}
+          >
+            <FontAwesomeIcon icon={faRectangleXmark} className=' w-4' /> Clear filter
+          </button>
+        </div>
       )}
+
 
       <ul className='text-custom_grey'>
         {paginatedRepos.length > 0 ? (
           paginatedRepos.map((repo: Repo) => (
-            // <RepoCard
-            //   key={repo.id}
-            //   repo={repo}
-            //   showSponsor={true}
-            // />
-
-            // <RepoCard
-            //   key={repo.id}
-            //   repo={repo}
-            //   sparklineData={commitData[repo.id] ?? new Array(52).fill(0)}
-            // />
-
             <RepoCard
               key={repo.id}
               repo={repo}
