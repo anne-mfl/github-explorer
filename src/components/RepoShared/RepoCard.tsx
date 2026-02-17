@@ -23,16 +23,19 @@ interface RepoCardProps {
 }
 
 const RepoCard = ({ repo, topics, actions, showLicense = true }: RepoCardProps) => {
-  const displayName = repo.owner
-    ? `${repo.owner.login}/${repo.name}`
-    : repo.name;
+
 
   return (
     <li className='py-6 border-b border-custom_light_grey flex justify-between items-center'>
       <section>
         <div className='mb-1 flex items-center gap-2'>
-          <Link href={repo.url} className='link_button text-xl'>{displayName}</Link>
-          {repo.isPrivate !== undefined && (
+          <Link href={repo.url} className='link_button text-xl'>
+            {repo.owner ? (
+              <>{repo.owner.login} / <b>{repo.name}</b></>
+            ) : (
+              <>{repo.name}</>
+            )}
+          </Link>          {repo.isPrivate !== undefined && (
             <span className='private_public_badge'>
               {repo.isPrivate ? 'Private' : 'Public'}
             </span>
