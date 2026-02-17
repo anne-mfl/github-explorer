@@ -5,9 +5,11 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_REPOSITORIES } from './query'
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Loading from '@/components/Loading';
-import RepoCard from './components/RepoCard';
-import RepoSearchBar from './components/RepoSearchBar';
-import RepoPagination from './components/RepoPagination';
+import RepoCard from '@/components/RepoShared/RepoCard';
+import RepoSearchBar from '@/components/RepoShared/RepoSearchBar';
+import RepoTopics from './components/RepoTopics';
+import RepoSparkline from './components/RepoSparkline';
+import RepoPagination from '@/components/RepoShared/RepoPagination';
 import { fetchCommitActivity } from '@/utils/fetchCommitActivity';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRectangleXmark } from '@fortawesome/free-solid-svg-icons';
@@ -231,10 +233,27 @@ const Repositories = () => {
       <ul className='text-custom_grey'>
         {paginatedRepos.length > 0 ? (
           paginatedRepos.map((repo: Repo) => (
+            // <RepoCard
+            //   key={repo.id}
+            //   repo={repo}
+            //   sparklineData={commitData[repo.id] ?? new Array(52).fill(0)}
+            // />
+
+            // <div key={repo.id} className='relative'>
+            //   <RepoCard
+            //     repo={repo}
+            //     topics={<RepoTopics topics={repo.repositoryTopics.nodes} />}
+            //   />
+            //   <div className='absolute right-0 top-1/2 -translate-y-1/2'>
+            //     <RepoSparkline data={commitData[repo.id] ?? new Array(52).fill(0)} />
+            //   </div>
+            // </div>
+
             <RepoCard
               key={repo.id}
               repo={repo}
-              sparklineData={commitData[repo.id] ?? new Array(52).fill(0)}
+              topics={<RepoTopics topics={repo.repositoryTopics.nodes} />}
+              actions={<RepoSparkline data={commitData[repo.id] ?? new Array(52).fill(0)} />}
             />
           ))
         ) : (

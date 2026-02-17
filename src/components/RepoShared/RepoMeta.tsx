@@ -11,9 +11,10 @@ interface RepoMetaProps {
   licenseInfo: { name: string } | null;
   pushedAt: string | null;
   url: string;
+  showLicense?: boolean;
 }
 
-const RepoMeta = ({ primaryLanguage, stargazerCount, forkCount, licenseInfo, pushedAt, url }: RepoMetaProps) => {
+const RepoMeta = ({ primaryLanguage, stargazerCount, forkCount, licenseInfo, pushedAt, url, showLicense = true }: RepoMetaProps) => {
   return (
     <div className='text-xs flex items-center mt-2 [&>span]:mr-4'>
       {primaryLanguage &&
@@ -38,7 +39,7 @@ const RepoMeta = ({ primaryLanguage, stargazerCount, forkCount, licenseInfo, pus
           </Link>
         </span>
       }
-      {licenseInfo &&
+      {showLicense && licenseInfo &&
         <span>
           <FontAwesomeIcon icon={faScaleBalanced} className='mr-1' />
           {licenseInfo.name}

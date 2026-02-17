@@ -7,10 +7,28 @@ import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useGithubContext } from 'context/GithubContext';
 
+type Tab = {
+  name: string;
+  disabled?: boolean;
+}
+
+const tabs: Tab[] = [
+  { name: "overview" },
+  { name: "repositories" },
+  { name: "projects", disabled: true },
+  { name: "packages", disabled: true },
+  { name: "stars" },
+];
+
+const tabIcons = {
+  overview: faBookOpen,
+  repositories: faBookBookmark,
+  projects: faTableColumns,
+  packages: faCube,
+  stars: faStar,
+};
+
 const Tab = () => {
-
-  const tabs = ["overview", "repositories", "projects", "packages", "stars"];
-
   const { userId } = useParams();
   const currentTab = useSearchParams().get("tab") || "overview";
   const githubContext = useGithubContext();
@@ -19,22 +37,32 @@ const Tab = () => {
 
   return (
     <div className='bg-navbar_background border-b border-custom_light_grey px-4 h-11'>
-      <ul className={`h-full flex items-center gap-4`}>
-        {tabs.map((tab) => (
-          <li className={currentTab === tab ? "border-b-2 border-custom_orange font-semibold h-full" : "h-full"} key={tab}>
-            <Link
-              href={`/${userId}${tab === "overview" ? "" : `?tab=${tab}`}`}
-              className='cursor-pointer primary_button px-2 py-1.5 flex items-center gap-2'
-            >
-              <FontAwesomeIcon icon={tab === "overview" ? faBookOpen : tab === "repositories" ? faBookBookmark : tab === "projects" ? faTableColumns : tab === "packages" ? faCube : faStar} />
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              {tab === "repositories" && repoCount > 0 &&
-                <span className='text-xs bg-hover_grey font-semibold px-2 py-1 rounded-full'>{repoCount}</span>
-              }
-              {tab === "stars" && starredCount > 0 &&
-                <span className='text-xs bg-hover_grey font-semibold px-2 py-1 rounded-full'>{starredCount}</span>
-              }
-            </Link>
+      <ul className='h-full flex items-center gap-4'>
+        {tabs.map(({ name, disabled }) => (
+          <li
+            className={`h-full ${currentTab === name && !disabled ? "border-b-2 border-custom_orange font-semibold" : ""}`}
+            key={name}
+          >
+            {disabled ? (
+              <span className='primary_button px-2 py-1.5 flex items-center gap-2 cursor-not-allowed'>
+                <FontAwesomeIcon icon={tabIcons[name as keyof typeof tabIcons]} />
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </span>
+            ) : (
+              <Link
+                href={`/${userId}${name === "overview" ? "" : `?tab=${name}`}`}
+                className='cursor-pointer primary_button px-2 py-1.5 flex items-center gap-2'
+              >
+                <FontAwesomeIcon icon={tabIcons[name as keyof typeof tabIcons]} />
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+                {name === "repositories" && repoCount > 0 &&
+                  <span className='text-xs bg-hover_grey font-semibold px-2 py-1 rounded-full'>{repoCount}</span>
+                }
+                {name === "stars" && starredCount > 0 &&
+                  <span className='text-xs bg-hover_grey font-semibold px-2 py-1 rounded-full'>{starredCount}</span>
+                }
+              </Link>
+            )}
           </li>
         ))}
       </ul>

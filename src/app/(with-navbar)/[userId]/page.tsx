@@ -7,6 +7,7 @@ import { GET_USER_OVERVIEW } from './query';
 import { useGithubContext } from 'context/GithubContext';
 import Tab from './components/Tab';
 import Overview from './components/Overview';
+import Stars from './components/Stars';
 import Repositories from './components/Repositories';
 import ProfileSideBar from '@/components/ProfileSideBar';
 import Loading from '@/components/Loading';
@@ -67,8 +68,9 @@ const User = () => {
       <main className='flex gap-6 mx-32 my-8'>
         <ProfileSideBar />
         <div className='flex-1 min-w-0'>
-          {currentTab === "overview" && <Overview />}
-          {currentTab === "repositories" && <Repositories />}
+          {currentTab === 'overview' && <Overview />}
+          {currentTab === 'repositories' && <Repositories />}
+          {currentTab === 'stars' && <Stars />}
         </div>
       </main>
     </div>

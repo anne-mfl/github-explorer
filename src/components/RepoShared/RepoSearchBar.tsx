@@ -6,8 +6,8 @@ import FilterDropdown from '@/components/FilterDropdown';
 interface RepoSearchBarProps {
   repos: {
     primaryLanguage: { name: string; color: string | null } | null;
-    isFork: boolean;
-    isArchived: boolean;
+    isFork?: boolean;
+    isArchived?: boolean;
   }[];
   searchTerm: string;
   selectedType: string;
@@ -17,6 +17,9 @@ interface RepoSearchBarProps {
   onTypeChange: (value: string) => void;
   onLanguageChange: (value: string) => void;
   onSortChange: (value: string) => void;
+  showTypeFilter?: boolean;
+  placeholder?: string;
+  sortOptions?: { label: string; value: string }[];
 }
 
 const TYPE_OPTIONS = [
@@ -27,10 +30,16 @@ const TYPE_OPTIONS = [
   { label: 'Mirrors', value: 'mirrors' },
 ];
 
-const SORT_OPTIONS = [
+export const REPO_SORT_OPTIONS = [
   { label: 'Last updated', value: 'last-updated' },
   { label: 'Name', value: 'name' },
   { label: 'Stars', value: 'stars' },
+];
+
+export const STARS_SORT_OPTIONS = [
+  { label: 'Recently starred', value: 'recently-starred' },
+  { label: 'Recently active', value: 'last-updated' },
+  { label: 'Name', value: 'name' },
 ];
 
 const RepoSearchBar = ({
@@ -43,9 +52,11 @@ const RepoSearchBar = ({
   onTypeChange,
   onLanguageChange,
   onSortChange,
+  showTypeFilter = true,
+  placeholder = 'Find a repository...',
+  sortOptions = REPO_SORT_OPTIONS,
 }: RepoSearchBarProps) => {
 
-  // Dynamically build language options from repos
   const languageOptions = useMemo(() => {
     const langMap = new Map<string, number>();
 
@@ -55,8 +66,7 @@ const RepoSearchBar = ({
       }
     });
 
-    const sorted = Array.from(langMap.entries())
-      .sort((a, b) => b[1] - a[1]); // Sort by count descending
+    const sorted = Array.from(langMap.entries()).sort((a, b) => b[1] - a[1]);
 
     return [
       { label: 'All', value: 'all', count: repos.length },
@@ -69,18 +79,20 @@ const RepoSearchBar = ({
       <div className='flex py-4 border-b border-custom_light_grey'>
         <input
           type='text'
-          placeholder='Find a repository...'
+          placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           className='h-8 border border-custom_light_grey rounded-lg w-96 pl-4 pr-10 mr-2'
         />
         <div className='flex gap-2'>
-          <FilterDropdown
-            label='Type'
-            options={TYPE_OPTIONS}
-            selectedValue={selectedType}
-            onSelect={onTypeChange}
-          />
+          {showTypeFilter && (
+            <FilterDropdown
+              label='Type'
+              options={TYPE_OPTIONS}
+              selectedValue={selectedType}
+              onSelect={onTypeChange}
+            />
+          )}
           <FilterDropdown
             label='Language'
             options={languageOptions}
@@ -90,7 +102,7 @@ const RepoSearchBar = ({
           />
           <FilterDropdown
             label='Sort'
-            options={SORT_OPTIONS}
+            options={sortOptions}
             selectedValue={selectedSort}
             onSelect={onSortChange}
           />
