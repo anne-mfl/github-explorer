@@ -44,8 +44,8 @@ const StarButton = ({ sponsor = null }: StarButtonProps) => {
       {sponsor && sponsor.length > 0 && (
         <div className='flex h-7'>
           <Link href={sponsor[0].url}>
-            <button className='grey_button rounded-md font-normal text-xs flex items-center'>
-              <FontAwesomeIcon icon={faHeart} className='mr-2 w-4 h-4 text-[#BF3989] text-sm' />
+            <button className='grey_button px-3 rounded-md font-normal text-xs flex items-center'>
+              <FontAwesomeIcon icon={faHeart} className='mr-2 text-[#BF3989] text-sm' />
               Sponsor
             </button>
           </Link>
@@ -53,15 +53,15 @@ const StarButton = ({ sponsor = null }: StarButtonProps) => {
       )}
       <div className='relative' ref={dropdownRef}>
         <div className='flex h-7'>
-          <button className='grey_button rounded-none rounded-l-md font-normal text-xs flex items-center'>
-            <FontAwesomeIcon icon={faStar} className='mr-2 w-4 h-4 text-sm' />
+          <button className='grey_button px-3 rounded-none rounded-l-md font-normal text-xs flex items-center'>
+            <FontAwesomeIcon icon={faStar} className='mr-2 text-sm' />
             Star
           </button>
           <button
-            className='grey_button rounded-none rounded-r-md border-l-0'
+            className='grey_button px-3 rounded-none rounded-r-md border-l-0'
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <FontAwesomeIcon icon={faCaretDown} className='mb-1' />
+            <FontAwesomeIcon icon={faCaretDown} className='mb-0.5' />
           </button>
         </div>
 

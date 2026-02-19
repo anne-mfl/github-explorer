@@ -36,7 +36,7 @@ const ProfileSideBar = () => {
         </div>
       </div>
 
-      <div className='flex flex-col border-b border-custom_border_grey py-2'>
+      <div className='flex flex-col border-b border-custom_light_grey py-2'>
 
         <div className='mb-3 order-1 max-md:order-4'>
           <button className='grey_button w-full'>Follow</button>

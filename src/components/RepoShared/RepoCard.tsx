@@ -20,9 +20,10 @@ interface RepoCardProps {
   topics?: React.ReactNode;
   actions?: React.ReactNode; // Repositories passes <RepoSparkline />, Stars passes <StarButton />
   showLicense?: boolean;
+  showPublicOrPrivate?: boolean;
 }
 
-const RepoCard = ({ repo, topics, actions, showLicense = true }: RepoCardProps) => {
+const RepoCard = ({ repo, topics, actions, showLicense = true, showPublicOrPrivate = true }: RepoCardProps) => {
 
   return (
     <li className='py-6 border-b border-custom_light_grey flex justify-between items-center'>
@@ -34,7 +35,8 @@ const RepoCard = ({ repo, topics, actions, showLicense = true }: RepoCardProps) 
             ) : (
               <>{repo.name}</>
             )}
-          </Link>          {repo.isPrivate !== undefined && (
+          </Link>
+          {showPublicOrPrivate && repo.isPrivate !== undefined && (
             <span className='private_public_badge'>
               {repo.isPrivate ? 'Private' : 'Public'}
             </span>
@@ -66,7 +68,7 @@ const RepoCard = ({ repo, topics, actions, showLicense = true }: RepoCardProps) 
       </section>
 
       {actions && (
-        <section className='ml-16 shrink-0'>
+        <section className='shrink-0'>
           {actions}
         </section>
       )}

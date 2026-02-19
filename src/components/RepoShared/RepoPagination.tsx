@@ -14,7 +14,7 @@ const RepoPagination = ({ currentPage, hasNextPage, isLoading, totalCount, onPre
   if (totalCount <= 30) return null;
 
   return (
-    <div className='flex items-center justify-center gap-2 py-6'>
+    <div className='flex items-center justify-center gap-2 py-6 max-md:justify-start'>
       <button
         onClick={onPrevious}
         disabled={currentPage === 1 || isLoading}

@@ -7,9 +7,9 @@ interface RepoSparklineProps {
 
 const RepoSparkline = ({ data }: RepoSparklineProps) => {
   return (
-    <section className='ml-16'>
+    <section className=''>
       <StarButton />
-      <div className='flex items-center mt-2'>
+      <div className='flex items-center mt-2 max-lg:hidden'>
         <Sparklines data={data} width={150} height={24} margin={2}>
           <SparklinesLine color="#3fb950" style={{ fill: "none", strokeWidth: 2 }} />
         </Sparklines>

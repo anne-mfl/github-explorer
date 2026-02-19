@@ -75,15 +75,15 @@ const RepoSearchBar = ({
 
   return (
     <div>
-      <div className='flex py-4 border-b border-custom_light_grey'>
+      <div className='flex py-4 border-b border-custom_light_grey max-lg:flex-wrap max-lg:gap-2'>
         <input
           type='text'
           placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className='h-8 border border-custom_light_grey rounded-lg w-96 pl-4 pr-10 mr-2'
+          className='h-8 border border-custom_light_grey rounded-lg w-96 pl-4 pr-10 mr-2 max-lg:w-full max-lg:mr-0'
         />
-        <div className='flex gap-2'>
+        <div className='flex gap-2 max-sm:flex-wrap'>
           {/* {showTypeFilter && ( */}
             <FilterDropdown
               label='Type'

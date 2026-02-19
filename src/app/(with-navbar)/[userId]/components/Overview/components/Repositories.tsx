@@ -20,7 +20,7 @@ const Repositories = () => {
       <h2 className='text-base mb-2'>
         {pinnedRepos.length > 0 ? 'Pinned' : 'Popular repositories'}
       </h2>
-      <div className='grid grid-cols-2 gap-3'>
+      <div className='grid grid-cols-2 gap-3 max-md:grid-cols-1'>
         {(pinnedRepos.length > 0 ? pinnedRepos : normalRepos.slice(0, 6)).map((repo: Repo) => (
           <section key={repo?.id} className='flex flex-col border border-custom_border_grey rounded p-4 text-xs text-custom_grey'>
 

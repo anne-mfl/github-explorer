@@ -16,7 +16,7 @@ interface RepoMetaProps {
 
 const RepoMeta = ({ primaryLanguage, stargazerCount, forkCount, licenseInfo, pushedAt, url, showLicense = true }: RepoMetaProps) => {
   return (
-    <div className='text-xs flex items-center mt-2 [&>span]:mr-4'>
+    <div className='text-xs flex items-center mt-2 [&>span:not(:last-child)]:mr-4 [&>span]:whitespace-nowrap max-lg:flex-wrap'>
       {primaryLanguage &&
         <span className='flex items-center gap-1 mr-4'>
           <span style={{ backgroundColor: primaryLanguage.color ?? '#ccc' }} className='h-3 w-3 rounded-full'>&nbsp;</span>

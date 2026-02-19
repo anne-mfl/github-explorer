@@ -33,7 +33,7 @@ const Stars = () => {
     allRepos,
     tab: 'stars',
     defaultSort: 'recently-starred',
-    getOwner: (repo) => repo.owner?.login ?? userId, 
+    getOwner: (repo) => repo.owner?.login ?? userId,
   });
 
   type Repo = typeof allRepos[number];
@@ -82,6 +82,7 @@ const Stars = () => {
               actions={<StarButton sponsor={repo.fundingLinks} />}
               // actions={<StarButton showSponsor={repo.fundingLinks.length > 0} />}
               showLicense={false}
+              showPublicOrPrivate={false}
             />
           ))
         ) : (

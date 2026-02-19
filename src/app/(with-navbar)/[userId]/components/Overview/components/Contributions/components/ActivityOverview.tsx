@@ -9,7 +9,6 @@ const ActivityOverview = () => {
 
   const { contributions } = useGithubContext()
   const contributedTo = contributions.commitContributionsByRepository
-  console.log(contributedTo)
 
   type ContributedRepo = typeof contributedTo[number];
 
@@ -22,7 +21,7 @@ const ActivityOverview = () => {
   );
 
   return (
-    <div className='border-r border-custom_border_grey pr-8 flex-auto'>
+    <div className='border-r border-custom_border_grey pr-8 flex-auto max-lg:mb-2 max-lg:border-0'>
       <h2 className='mb-4'>Activity Overview</h2>
 
       <div className='flex flex-wrap mb-2'>
@@ -43,24 +42,28 @@ const ActivityOverview = () => {
         ))}
       </div>
 
-      <div className='flex '>
-        <FontAwesomeIcon icon={faBookBookmark} className='mt-1 mr-2' />
-        <p>
-          Contributed to&nbsp;
-          {contributedTo.slice(0, 3).map((repo: ContributedRepo, index: number) => (
-            <span key={repo.repository.nameWithOwner}>
-              <Link
-                className='link_button'
-                href={repo.repository.url}
-              >
-                {repo.repository.nameWithOwner}
-              </Link>
-              {index < 2 && ', '}
-            </span>
-          ))}
-          {contributedTo.length > 3 && ` and ${contributedTo.length - 3} other repositories`}
-        </p>
-      </div>
+      {
+        contributedTo.length > 0 && (
+          <div className='flex'>
+            <FontAwesomeIcon icon={faBookBookmark} className='mt-1 mr-2' />
+            <p>
+              Contributed to&nbsp;
+              {contributedTo.slice(0, 3).map((repo: ContributedRepo, index: number) => (
+                <span key={repo.repository.nameWithOwner}>
+                  <Link
+                    className='link_button'
+                    href={repo.repository.url}
+                  >
+                    {repo.repository.nameWithOwner}
+                  </Link>
+                  {index < 2 && ', '}
+                </span>
+              ))}
+              {contributedTo.length > 3 && ` and ${contributedTo.length - 3} other repositories`}
+            </p>
+          </div>
+        )
+      }
     </div>
   )
 }
