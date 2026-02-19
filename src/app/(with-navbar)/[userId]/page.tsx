@@ -65,8 +65,10 @@ const User = () => {
   return (
     <div>
       <Tab />
-      <main className='flex gap-6 mx-32 my-8'>
-        <ProfileSideBar />
+      <main className='flex max-md:flex-col gap-6 my-8 max-w-[1280px] mx-auto px-8 max-lg:px-6 max-md:px-4'>
+        <div className='w-74 max-lg:w-64 max-md:w-full'>
+          <ProfileSideBar />
+        </div>
         <div className='flex-1 min-w-0'>
           {currentTab === 'overview' && <Overview />}
           {currentTab === 'repositories' && <Repositories />}
