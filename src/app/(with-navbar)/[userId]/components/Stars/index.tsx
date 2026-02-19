@@ -79,7 +79,8 @@ const Stars = () => {
             <RepoCard
               key={repo.id}
               repo={repo}
-              actions={<StarButton showSponsor={repo.fundingLinks.length > 0} />}
+              actions={<StarButton sponsor={repo.fundingLinks} />}
+              // actions={<StarButton showSponsor={repo.fundingLinks.length > 0} />}
               showLicense={false}
             />
           ))

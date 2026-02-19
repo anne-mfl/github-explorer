@@ -24,7 +24,6 @@ interface RepoCardProps {
 
 const RepoCard = ({ repo, topics, actions, showLicense = true }: RepoCardProps) => {
 
-
   return (
     <li className='py-6 border-b border-custom_light_grey flex justify-between items-center'>
       <section>
