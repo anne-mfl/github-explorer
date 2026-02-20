@@ -20,6 +20,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
 
   const [inputValue, setInputValue] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const router = useRouter();
   const { setUserId } = useGithubContext();
@@ -41,6 +42,24 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
     setInputValue('')
     router.push(`/${userId}`);
   }
+
+  // Track screen size for responsive placeholder
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 640); // 640px is the sm breakpoint
+    };
+
+    // Check on mount
+    checkScreenSize();
+
+    // Add event listener
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  const placeholder = isMobile ? 'Search...' : 'Search GitHub Users or Repositories';
 
 
   // Handle modal state
@@ -101,56 +120,55 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
 
 
   const SearchResults = () => (
-    <>
-      {(userLoading && repoLoading) &&
-      // <p className="px-4 py-2">Loading...</p>
+  <>
+    {(userLoading && repoLoading) &&
       <Loading />
-      }
+    }
 
-      {userError && <p className="px-4 py-2 text-red-500">Users Error: {userError.message}</p>}
-      {repoError && <p className="px-4 py-2 text-red-500">Repos Error: {repoError.message}</p>}
+    {userError && <p className="px-4 py-2 text-red-500">Users Error: {userError.message}</p>}
+    {repoError && <p className="px-4 py-2 text-red-500">Repos Error: {repoError.message}</p>}
 
-      {(userData && inputValue !== '') &&
-        <ul className='w-full px-4'>
-          <p className='text-custom_grey text-xs p-2'>Owners</p>
-          {userData.search.nodes.map((user: { name: string; login: string }, i: number) => (
-            <li
-              onClick={() => handleNavigation(user.login)}
-              key={`${user.name}_${user.login}_${i}`}
-              className='flex items-center justify-between primary_button px-2 py-1.5 cursor-pointer'
-            >
-              <div className='flex items-center gap-2'>
-                <FontAwesomeIcon icon={faBookBookmark} />
-                <p className=''>{user.login}</p>
-              </div>
-              <button className='text-custom_grey'>Jump to</button>
-            </li>
-          ))}
-        </ul>
-      }
+    {(userData && inputValue !== '') &&
+      <ul className='w-full px-4'>
+        <p className='text-custom_grey text-xs p-2'>Owners</p>
+        {userData.search.nodes.map((user: { name: string; login: string }, i: number) => (
+          <li
+            onClick={() => handleNavigation(user.login)}
+            key={`${user.name}_${user.login}_${i}`}
+            className='flex items-center justify-between primary_button px-2 py-1.5 cursor-pointer gap-2'
+          >
+            <div className='flex items-center gap-2 min-w-0 flex-1'>
+              <FontAwesomeIcon icon={faBookBookmark} className='flex-shrink-0' />
+              <p className='truncate'>{user.login}</p>
+            </div>
+            <button className='text-custom_grey flex-shrink-0 whitespace-nowrap'>Jump to</button>
+          </li>
+        ))}
+      </ul>
+    }
 
-      {(userData && userData.search.nodes.length > 0 && repoData && repoData.search.nodes.length > 0) &&
-        <div className='w-full border-b border-custom_light_grey'>&nbsp;</div>
-      }
+    {(userData && userData.search.nodes.length > 0 && repoData && repoData.search.nodes.length > 0) &&
+      <div className='w-full border-b border-custom_light_grey'>&nbsp;</div>
+    }
 
-      {(repoData && inputValue !== '') &&
-        <ul className='w-full px-4'>
-          <p className='text-custom_grey text-xs p-2'>Repositories</p>
-          {repoData.search.nodes.map((repo: { name: string; owner: { login: string } }) => (
-            <li key={`${repo.name}_${repo.owner.login}`} className='flex items-center justify-between primary_button px-2 py-1.5'>
-              <div className='flex items-center gap-2'>
-                <FontAwesomeIcon icon={faBookBookmark} />
-                <p className='truncate max-w-58'>
-                  {repo.owner.login}/{repo.name}
-                </p>
-              </div>
-              <button className='text-custom_grey'>Jump to</button>
-            </li>
-          ))}
-        </ul>
-      }
-    </>
-  );
+    {(repoData && inputValue !== '') &&
+      <ul className='w-full px-4'>
+        <p className='text-custom_grey text-xs p-2'>Repositories</p>
+        {repoData.search.nodes.map((repo: { name: string; owner: { login: string } }) => (
+          <li key={`${repo.name}_${repo.owner.login}`} className='flex items-center justify-between primary_button px-2 py-1.5 gap-2'>
+            <div className='flex items-center gap-2 min-w-0 flex-1'>
+              <FontAwesomeIcon icon={faBookBookmark} className='flex-shrink-0' />
+              <p className='truncate'>
+                {repo.owner.login}/{repo.name}
+              </p>
+            </div>
+            <button className='text-custom_grey flex-shrink-0 whitespace-nowrap'>Jump to</button>
+          </li>
+        ))}
+      </ul>
+    }
+  </>
+);
 
   if (isInNavbar) {
     return (
@@ -164,8 +182,8 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
               type='text'
               value={inputValue}
               onChange={handleInputChange}
-              placeholder='Search GitHub Users or Repositories'
-              className='h-8 border border-custom_light_grey rounded-lg w-96 pl-7 pr-10'
+               placeholder={placeholder}
+              className='h-8 border border-custom_light_grey rounded-lg w-full max-sm:w-full sm:w-96 pl-7 pr-10 max-sm:pr-2'
             />
           </div>
 
@@ -184,7 +202,11 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
               {/* Search results container */}
               <div
                 id="search-results"
-                className="absolute -top-4 left-0 right-0 mt-1 bg-white rounded-lg shadow-lg  overflow-y-auto z-50"
+                className="
+                  max-sm:fixed max-sm:left-4 max-sm:right-4 max-sm:top-3
+                  sm:absolute sm:-top-4 sm:left-0 sm:right-0 sm:mt-1
+                  bg-white rounded-lg shadow-lg overflow-y-auto z-50
+                "
                 onClick={(e) => {
                   // Close modal if clicking on the background of the search results
                   if (e.target === e.currentTarget) {
@@ -194,7 +216,7 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
                 }}
               >
                 <section className={`${inputValue !== '' ? 'border border-custom_light_grey rounded-lg' : ''} flex flex-col items-center justify-center gap-2 py-[11px] overflow-y-auto max-h-125 `}>
-                  <div className='px-4 relative'>
+                  <div className='px-4 relative w-full max-sm:w-full'>
                     <span className='absolute left-6 top-1/2 transform -translate-y-1/2 text-custom_grey'>
                       <FontAwesomeIcon icon={faMagnifyingGlass} className='' />
                     </span>
@@ -202,8 +224,8 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
                       type='text'
                       value={inputValue}
                       onChange={handleInputChange}
-                      placeholder='Search GitHub Users or Repositories'
-                      className='h-8 border border-custom_light_grey rounded-lg w-96 pl-7 pr-10'
+                       placeholder={placeholder}
+                      className='h-8 border border-custom_light_grey rounded-lg w-full pl-7 pr-10 max-sm:pr-2'
                     />
                     <span
                       onClick={handleClear}
@@ -233,8 +255,8 @@ const Search = ({ isInNavbar = false }: SearchProps) => {
           type='text'
           value={inputValue}
           onChange={handleInputChange}
-          placeholder='Search GitHub Users or Repositories'
-          className='h-8 border border-custom_light_grey rounded-lg w-96 pl-7 pr-10'
+           placeholder={placeholder}
+          className='h-8 border border-custom_light_grey rounded-lg w-96 pl-7 pr-10 max-sm:pr-2'
         />
         {inputValue !== '' &&
           <span
