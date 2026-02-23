@@ -29,7 +29,8 @@ const Repositories = () => {
                 <div className='flex gap-2 items-center'>
                   {pinnedRepos.length > 0 && <FontAwesomeIcon icon={faBookBookmark} className='text-sm' />}
                   <h3 className='link_button text-sm'>
-                    <Link href={`/${userData?.user?.login}/${repo?.name}`}>
+                    <Link href={`https://github.com/${userData?.user?.login}/${repo?.name}`} target="_blank">
+                      {/* <Link href={`/${userData?.user?.login}/${repo?.name}`}> */}
                       {repo?.name}
                     </Link>
                   </h3>

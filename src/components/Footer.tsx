@@ -47,7 +47,7 @@ const Footer = () => {
         <li className='link_secondary whitespace-nowrap'>Manage cookies</li>
       </ul>
 
-      <span className='link_secondary whitespace-nowrap mx-2 mb-2'>Do not share my personal information</span>
+      <span className='link_secondary whitespace-nowrap mx-2 max-lg:mb-2'>Do not share my personal information</span>
 
     </footer>
   )

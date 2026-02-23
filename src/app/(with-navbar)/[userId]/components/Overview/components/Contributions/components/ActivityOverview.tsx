@@ -52,6 +52,7 @@ const ActivityOverview = () => {
                 <span key={repo.repository.nameWithOwner}>
                   <Link
                     className='link_button'
+                    target="_blank"
                     href={repo.repository.url}
                   >
                     {repo.repository.nameWithOwner}
